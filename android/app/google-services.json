@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "524817647805",
+    "project_id": "fair-bangla",
+    "storage_bucket": "fair-bangla.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524817647805:android:23cbb95f5bd6a72162cfd4",
+        "android_client_info": {
+          "package_name": "com.example.fair_bangla"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkQqlx-U57ox-Ce1sz2ZAcSUzdu94Rih4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
