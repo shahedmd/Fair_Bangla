@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,6 @@ class _WebHomePageState extends State<WebHomePage> {
     timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (pageController.hasClients) {
         int nextPage = ((pageController.page ?? 0).toInt() + 1) % elmentsControler.urlList.length;
-        print('Next page: $nextPage');
         pageController.animateToPage(
           nextPage,
           duration: const Duration(milliseconds: 500),
@@ -61,9 +61,8 @@ class _WebHomePageState extends State<WebHomePage> {
                   width: 500.w,
                   height: 600.h,
                   child: Obx(() {
-                    // Check if urlList is empty, and show loading indicator or PageView accordingly
                     if (elmentsControler.urlList.isEmpty) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     return PageView.builder(
@@ -83,6 +82,13 @@ class _WebHomePageState extends State<WebHomePage> {
             ),
              SizedBox(height: 100.h),
             elmentsControler.brandBanner(),
+            SizedBox(height: 50.h,),
+
+            CustomText(inputText: "YOUNG'S FAV!", color: Colors.yellow, fontWeight: FontWeight.bold, fontsize: 26),
+
+            
+
+           elmentsControler.bottomNavbar()
           ],
         ),
       ),

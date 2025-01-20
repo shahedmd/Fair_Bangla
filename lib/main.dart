@@ -1,5 +1,4 @@
 import 'package:fair_bangla/Elemnts/navbarandbuttonelement.dart';
-
 import 'Webscreen/webshomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -56,7 +55,9 @@ class _MyAppState extends State<MyApp> {
         builder: (_, child) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(),
+            theme: ThemeData(
+              iconTheme: const IconThemeData(color: Colors.white)
+            ),
             home: child,
            
           );

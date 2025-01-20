@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Elements extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -21,8 +22,6 @@ class Elements extends GetxController {
       print('Error fetching URLs: $e');
     }
   }
-
-
 
   final FirebaseFirestore firestoreinstance = FirebaseFirestore.instance;
   RxList brandBannerList = <String>[].obs;
@@ -44,7 +43,7 @@ class Elements extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchUrls(); 
+    fetchUrls();
     // Fetch data when the controller is initialized
     fetchdataBrandlogolist();
   }
@@ -169,31 +168,217 @@ class Elements extends GetxController {
 
   Widget brandBanner() {
     return Container(
-  width: double.infinity,
-  height: 220.h,
-  color: Colors.yellow,
-  child: Obx(() {
-    return Align(  // Align the ListView.builder horizontally
-      alignment: Alignment.center,  // Center it horizontally
-      child: SizedBox(
-        width: 900.w,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: brandBannerList.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.all(35.r),
-              child: SizedBox(
-                height: 170.h,
-                width: 170.w,
-                child: Image.network(brandBannerList[index]),
+      width: double.infinity,
+      height: 220.h,
+      color: Colors.yellow,
+      child: Obx(() {
+        return Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: 900.w,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: brandBannerList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.all(35.r),
+                  child: SizedBox(
+                    height: 170.h,
+                    width: 170.w,
+                    child: Image.network(brandBannerList[index]),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget bottomNavbar() {
+    return Container(
+      width: double.infinity,
+      height: 450.h,
+      color: Colors.black,
+      child: Row(
+       
+        children: [
+          customeSizedBox(250, [
+            CustomText(
+                inputText: "FAIR BANGLA",
+                color: Colors.yellow,
+                fontWeight: FontWeight.bold,
+                fontsize: 25),
+            SizedBox(
+              height: 30.h,
+            ),
+            SizedBox(
+              width: 280.w,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.facebook,
+                      )),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const FaIcon(
+                        FontAwesomeIcons.instagram,
+                      )),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const FaIcon(
+                        FontAwesomeIcons.whatsapp,
+                      )),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const FaIcon(
+                        FontAwesomeIcons.twitter,
+                      )),
+                ],
               ),
-            );
-          },
-        ),
+            )
+          ]),
+
+          SizedBox(width: 450.w,),
+          customeSizedBox(300, [
+            CustomText(
+                inputText: "COMPANY",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontsize: 18),
+            SizedBox(
+              height: 35.h,
+            ),
+            CustomText(
+                inputText: "About Us",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Products",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Supports",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Careers",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+          ]),
+
+          SizedBox(width: 130.w,),
+          customeSizedBox(300, [
+            CustomText(
+                inputText: "LINKS",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontsize: 18),
+            SizedBox(
+              height: 35.h,
+            ),
+            CustomText(
+                inputText: "Share Location",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Order Tracking",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Size Guide",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "FAQs",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+          ]),
+                    SizedBox(width: 130.w,),
+
+          customeSizedBox(300, [
+            CustomText(
+                inputText: "LEGAL",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontsize: 18),
+            SizedBox(
+              height: 35.h,
+            ),
+            CustomText(
+                inputText: "Privacy & Policy",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Terms & Condition",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Supports",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomText(
+                inputText: "Careers",
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontsize: 18),
+          ]),
+        ],
       ),
     );
-  }),
-);
+  }
+
+  Widget customeSizedBox(double height, List<Widget> Widget) {
+    return SizedBox(
+      height: height.h,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: Widget,
+      ),
+    );
   }
 }
