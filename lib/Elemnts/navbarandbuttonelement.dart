@@ -1,4 +1,8 @@
+import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
+import 'package:fair_bangla/Elemnts/homePageProductsFetchControler.dart';
+import 'package:fair_bangla/cartPage/cartPage.dart';
+import 'package:fair_bangla/cartPage/getxCartControler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,6 +13,10 @@ class Elements extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   RxList urlList = <String>[].obs;
 
+  final homePageProductControler = Get.find<HomePageProductFetchControler>();
+
+  final cartControler = Get.find<CartControler>();
+
   Future<void> fetchUrls() async {
     try {
       QuerySnapshot querySnapshot =
@@ -18,9 +26,7 @@ class Elements extends GetxController {
           querySnapshot.docs.map((doc) => doc['url'] as String).toList();
 
       urlList.value = urls;
-    } catch (e) {
-      print('Error fetching URLs: $e');
-    }
+    } catch (e) {}
   }
 
   final FirebaseFirestore firestoreinstance = FirebaseFirestore.instance;
@@ -44,23 +50,27 @@ class Elements extends GetxController {
   void onInit() {
     super.onInit();
     fetchUrls();
-    // Fetch data when the controller is initialized
     fetchdataBrandlogolist();
+    homePageProductControler.fetchProducts();
   }
 
-  Widget customButton(String textinput) {
-    return Container(
-      height: 60.h,
-      width: 140.w,
-      decoration: BoxDecoration(
-          color: Colors.yellow.shade800,
-          borderRadius: BorderRadius.all(Radius.circular(12.r))),
-      child: Center(
-        child: CustomText(
-            inputText: textinput,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontsize: 18),
+  Widget customButton(String textinput, Color colors, VoidCallback voidCallback,
+      Color textColor) {
+    return InkWell(
+      onTap: voidCallback,
+      child: Container(
+        height: 60.h,
+        width: 140.w,
+        decoration: BoxDecoration(
+            color: colors,
+            borderRadius: BorderRadius.all(Radius.circular(12.r))),
+        child: Center(
+          child: CustomText(
+              inputText: textinput,
+              color: textColor,
+              fontWeight: FontWeight.bold,
+              fontsize: 18),
+        ),
       ),
     );
   }
@@ -112,7 +122,7 @@ class Elements extends GetxController {
             SizedBox(
               width: 70.w,
             ),
-            customButton("Log In")
+            customButton("Log In", Colors.yellow, () {}, Colors.black)
           ]),
     );
   }
@@ -159,7 +169,7 @@ class Elements extends GetxController {
             SizedBox(
               height: 25.h,
             ),
-            customButton("Shop Now")
+            customButton("Shop Now", Colors.yellow, () {}, Colors.black)
           ],
         ),
       ),
@@ -202,7 +212,6 @@ class Elements extends GetxController {
       height: 450.h,
       color: Colors.black,
       child: Row(
-       
         children: [
           customeSizedBox(250, [
             CustomText(
@@ -243,8 +252,9 @@ class Elements extends GetxController {
               ),
             )
           ]),
-
-          SizedBox(width: 450.w,),
+          SizedBox(
+            width: 450.w,
+          ),
           customeSizedBox(300, [
             CustomText(
                 inputText: "COMPANY",
@@ -284,8 +294,9 @@ class Elements extends GetxController {
                 fontWeight: FontWeight.normal,
                 fontsize: 18),
           ]),
-
-          SizedBox(width: 130.w,),
+          SizedBox(
+            width: 130.w,
+          ),
           customeSizedBox(300, [
             CustomText(
                 inputText: "LINKS",
@@ -325,8 +336,9 @@ class Elements extends GetxController {
                 fontWeight: FontWeight.normal,
                 fontsize: 18),
           ]),
-                    SizedBox(width: 130.w,),
-
+          SizedBox(
+            width: 130.w,
+          ),
           customeSizedBox(300, [
             CustomText(
                 inputText: "LEGAL",
@@ -379,6 +391,98 @@ class Elements extends GetxController {
         mainAxisAlignment: MainAxisAlignment.start,
         children: Widget,
       ),
+    );
+  }
+
+  Widget homePageProductList() {
+    return FutureBuilder(
+      future: homePageProductControler.fetchProducts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        if (!snapshot.hasData) {
+          return const Center(child: Text('No products found.'));
+        }
+
+        List<Products> productsData = snapshot.data!;
+        final orientation = MediaQuery.of(context).orientation;
+
+        return GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: (180.w / 280.h),
+              crossAxisCount: (orientation == Orientation.portrait) ? 2 : 4,
+              crossAxisSpacing: 30.w,
+              mainAxisSpacing: 30.h),
+          itemCount: productsData.length,
+          itemBuilder: (context, index) {
+            Products product = productsData[index];
+            return Padding(
+              padding: EdgeInsets.all(20.r),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.all(Radius.circular(20.r))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 220.h,
+                      width: 160.w,
+                      child: Image.network(
+                        product.url,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Image load error: $error'); // Debugging
+                          return const Icon(Icons.error,
+                              size: 50, color: Colors.red);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8.h,
+                    ),
+                    CustomText(
+                        inputText: product.name,
+                        fontsize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    CustomText(
+                        inputText: product.price.toString(),
+                        fontsize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        customButton(
+                            "Add to cart", Colors.black, () {
+                              cartControler.addProduct(product);
+                            }, Colors.yellow),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        customButton("Cart", Colors.black, () {
+                          Get.to(const  FairBanlgCart());
+                        }, Colors.yellow)
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

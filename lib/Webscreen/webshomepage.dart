@@ -70,8 +70,8 @@ class _WebHomePageState extends State<WebHomePage> {
                       itemCount: elmentsControler.urlList.length,
                       itemBuilder: (context, index) {
                         return Image.network(
-                          elmentsControler.urlList[index], // Correct image URL
-                          fit: BoxFit.contain,
+                          elmentsControler.urlList[index], 
+                          fit: BoxFit.scaleDown,
                         );
                       },
                     );
@@ -86,9 +86,16 @@ class _WebHomePageState extends State<WebHomePage> {
 
             CustomText(inputText: "YOUNG'S FAV!", color: Colors.yellow, fontWeight: FontWeight.bold, fontsize: 26),
 
+            SizedBox(height: 30.h,),
+            
+            elmentsControler.homePageProductList(),
+
+              SizedBox(height: 50.h,),
+
             
 
-           elmentsControler.bottomNavbar()
+           elmentsControler.bottomNavbar(),
+
           ],
         ),
       ),

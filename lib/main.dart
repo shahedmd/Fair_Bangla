@@ -1,3 +1,4 @@
+import 'package:fair_bangla/Elemnts/homePageProductsFetchControler.dart';
 import 'package:fair_bangla/Elemnts/navbarandbuttonelement.dart';
 import 'Webscreen/webshomepage.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'Mobile Screen/mobilehomescreen.dart';
+import 'cartPage/getxCartControler.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -25,8 +27,11 @@ class _MyAppState extends State<MyApp> {
    
    @override
   void initState() {
+         super.initState();
+        
+  Get.lazyPut(() => HomePageProductFetchControler());
+Get.put(CartControler());
   Get.put(Elements());
-     super.initState();
   }
 
 
