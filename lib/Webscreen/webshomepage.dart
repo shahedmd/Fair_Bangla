@@ -3,7 +3,7 @@ import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../Elemnts/navbarandbuttonelement.dart';
+import '../Elemnts/webElements.dart';
 
 class WebHomePage extends StatefulWidget {
   const WebHomePage({super.key});
@@ -22,7 +22,7 @@ class _WebHomePageState extends State<WebHomePage> {
     super.initState();
     pageController = PageController(initialPage: 0);
 
-    // Set up the timer to change the page every 4 seconds
+  
     timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (pageController.hasClients) {
         int nextPage = ((pageController.page ?? 0).toInt() + 1) % elmentsControler.urlList.length;

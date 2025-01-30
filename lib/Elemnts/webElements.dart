@@ -1,6 +1,7 @@
 import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
 import 'package:fair_bangla/Elemnts/homePageProductsFetchControler.dart';
+import 'package:fair_bangla/Webscreen/producsDetails.dart';
 import 'package:fair_bangla/cartPage/cartPage.dart';
 import 'package:fair_bangla/cartPage/getxCartControler.dart';
 import 'package:flutter/material.dart';
@@ -424,59 +425,64 @@ class Elements extends GetxController {
             Products product = productsData[index];
             return Padding(
               padding: EdgeInsets.all(20.r),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.yellow,
-                    borderRadius: BorderRadius.all(Radius.circular(20.r))),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 220.h,
-                      width: 160.w,
-                      child: Image.network(
-                        product.url,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          print('Image load error: $error'); // Debugging
-                          return const Icon(Icons.error,
-                              size: 50, color: Colors.red);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    CustomText(
-                        inputText: product.name,
-                        fontsize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                    CustomText(
-                        inputText: product.price.toString(),
-                        fontsize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        customButton(
-                            "Add to cart", Colors.black, () {
-                              cartControler.addProduct(product);
-                            }, Colors.yellow),
-                        SizedBox(
-                          width: 10.w,
+              child: InkWell(
+                onTap: (){
+                  Get.to(ProductsDetails(products: product));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.all(Radius.circular(20.r))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 220.h,
+                        width: 160.w,
+                        child: Image.network(
+                          product.url,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            print('Image load error: $error'); // Debugging
+                            return const Icon(Icons.error,
+                                size: 50, color: Colors.red);
+                          },
                         ),
-                        customButton("Cart", Colors.black, () {
-                          Get.to(const  FairBanlgCart());
-                        }, Colors.yellow)
-                      ],
-                    )
-                  ],
+                      ),
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                      CustomText(
+                          inputText: product.name,
+                          fontsize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                      CustomText(
+                          inputText: product.price.toString(),
+                          fontsize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          customButton(
+                              "Add to cart", Colors.black, () {
+                                cartControler.addProduct(product);
+                              }, Colors.yellow),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          customButton("Cart", Colors.black, () {
+                            Get.to(const  FairBanlgCart());
+                          }, Colors.yellow)
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

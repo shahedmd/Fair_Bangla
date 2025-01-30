@@ -5,9 +5,10 @@ class Products {
   String url;
   double price;
   String id;
+  List<String> colors;
   
 
-  Products({required this.name,  required this.price, required this.url, required this.id});
+  Products({required this.name,  required this.price, required this.url, required this.id, required this.colors});
 
   factory Products.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -17,6 +18,7 @@ class Products {
       name: data['name'] ?? '',
       price: data['price']?.toDouble() ?? 0.0,
       url: data['url'] ?? '',
+      colors: List<String>.from(data['color']??[])
     
     );
   }  

@@ -44,4 +44,32 @@ class CartControler extends GetxController {
   void removeProduct(String productId) {
     productsList.removeWhere((item) => item.products.id == productId);
   }
+
+
+
+
+
+
+
+
+var selectedColor = ''.obs; // Observable for the selected color
+  var colors = <String>[].obs; // Observable list of colors
+
+  // Method to update the selected color
+  void updateSelectedColor(String color) {
+    selectedColor.value = color;
+  }
+
+  // Method to update the colors list 
+  void setColors(List<String> newColors) {
+    colors.value = newColors;
+    if (newColors.isNotEmpty) {
+      selectedColor.value = newColors[0]; // Default to the first color
+    }
+  }
+
+
+
+
+  
 }
