@@ -2,6 +2,7 @@ import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
 import 'package:fair_bangla/Elemnts/homePageProductsFetchControler.dart';
 import 'package:fair_bangla/Webscreen/producsDetails.dart';
+import 'package:fair_bangla/Webscreen/webshomepage.dart';
 import 'package:fair_bangla/cartPage/cartPage.dart';
 import 'package:fair_bangla/cartPage/getxCartControler.dart';
 import 'package:flutter/material.dart';
@@ -83,11 +84,14 @@ class Elements extends GetxController {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomText(
-                inputText: "FAIR BANGLA",
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontsize: 24),
+            InkWell(
+              onTap: ()=> Get.to( const WebHomePage()),
+              child: CustomText(
+                  inputText: "FAIR BANGLA",
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontsize: 24),
+            ),
             SizedBox(
               width: 200.w,
             ),
@@ -395,100 +399,105 @@ class Elements extends GetxController {
     );
   }
 
-  Widget homePageProductList() {
-    return FutureBuilder(
-      future: homePageProductControler.fetchProducts(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-        if (!snapshot.hasData) {
-          return const Center(child: Text('No products found.'));
-        }
+Widget homePageProductList() {
+  return FutureBuilder(
+    future: homePageProductControler.fetchProducts(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      }
+      if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
+        return const Center(child: Text('No products found.'));
+      }
 
-        List<Products> productsData = snapshot.data!;
-        final orientation = MediaQuery.of(context).orientation;
+      List<Products> productsData = snapshot.data!;
+      final orientation = MediaQuery.of(context).orientation;
 
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: (180.w / 280.h),
-              crossAxisCount: (orientation == Orientation.portrait) ? 2 : 4,
-              crossAxisSpacing: 30.w,
-              mainAxisSpacing: 30.h),
-          itemCount: productsData.length,
-          itemBuilder: (context, index) {
-            Products product = productsData[index];
-            return Padding(
-              padding: EdgeInsets.all(20.r),
-              child: InkWell(
-                onTap: (){
-                  Get.to(ProductsDetails(products: product));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.all(Radius.circular(20.r))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 220.h,
-                        width: 160.w,
-                        child: Image.network(
-                          product.url,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            print('Image load error: $error'); // Debugging
-                            return const Icon(Icons.error,
-                                size: 50, color: Colors.red);
-                          },
-                        ),
+      return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: (180.w / 280.h),
+            crossAxisCount: (orientation == Orientation.portrait) ? 2 : 4,
+            crossAxisSpacing: 30.w,
+            mainAxisSpacing: 30.h),
+        itemCount: productsData.length,
+        itemBuilder: (context, index) {
+          Products product = productsData[index];
+          return Padding(
+            padding: EdgeInsets.all(20.r),
+            child: InkWell(
+              onTap: () {
+                Get.to(ProductsDetails(products: product));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.all(Radius.circular(20.r))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 220.h,
+                      width: 160.w,
+                      child: Image.network(
+                        product.url,
+                        fit: BoxFit.contain,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                              child: CircularProgressIndicator()); // Show loader
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Image load error: $error');
+                          return Image.asset(
+                            'assets/images/placeholder.png', // Placeholder image
+                            height: 220.h,
+                            width: 160.w,
+                            fit: BoxFit.contain,
+                          );
+                        },
                       ),
-                      SizedBox(
-                        height: 8.h,
-                      ),
-                      CustomText(
-                          inputText: product.name,
-                          fontsize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                      CustomText(
-                          inputText: product.price.toString(),
-                          fontsize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          customButton(
-                              "Add to cart", Colors.black, () {
-                                cartControler.addProduct(product);
-                              }, Colors.yellow),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          customButton("Cart", Colors.black, () {
-                            Get.to(const  FairBanlgCart());
-                          }, Colors.yellow)
-                        ],
-                      )
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 8.h),
+                    CustomText(
+                        inputText: product.name,
+                        fontsize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    CustomText(
+                        inputText: product.price.toString(),
+                        fontsize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    SizedBox(height: 10.h),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        customButton(
+                            "Add to cart",
+                            Colors.black, () {
+                          cartControler.addProduct(product, context);
+                        }, Colors.yellow),
+                        SizedBox(width: 10.w),
+                        customButton("Cart", Colors.black, () {
+                          Get.to(const FairBanlgCart());
+                        }, Colors.yellow)
+                      ],
+                    )
+                  ],
                 ),
               ),
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
 }
