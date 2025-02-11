@@ -1,5 +1,6 @@
+// ignore_for_file: file_names
+
 import 'package:fair_bangla/Elemnts/datamodel.dart';
-import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,10 +17,12 @@ class CartProduct {
 class CartControler extends GetxController {
   var productsList = <CartProduct>[].obs;
 
+  // Get total cart price
   double get total => productsList.fold(
       0, (sum, item) => sum + item.products.price * item.quantity);
 
-   addProduct(Products product, BuildContext context) {
+  // Add a product to the cart
+  void addProduct(Products product, BuildContext context) {
     final index =
         productsList.indexWhere((item) => item.products.id == product.id);
     if (index != -1) {
@@ -27,41 +30,29 @@ class CartControler extends GetxController {
     } else {
       productsList.add(CartProduct(products: product, quantity: 1));
     }
-WidgetsBinding.instance.addPostFrameCallback((_) {
-  if (!context.mounted) return; // Prevents showing dialog if the widget is unmounted
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: CustomText(
-            inputText: "Success",
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontsize: 20),
-        content: CustomText(
-          inputText: "Item has been added to the cart",
-          color: Colors.black,
-          fontWeight: FontWeight.w700,
-          fontsize: 16,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: CustomText(
-              inputText: "OK",
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-              fontsize: 14,
-            ),
-          ),
-        ],
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return; // Prevent errors when widget is unmounted
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Success",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            content: const Text("Item has been added to the cart"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
       );
-    },
-  );
-});
-;
+    });
   }
 
+  // Update product quantity
   void updateQuantity(String productId, int quantity) {
     final index =
         productsList.indexWhere((item) => item.products.id == productId);
@@ -75,37 +66,60 @@ WidgetsBinding.instance.addPostFrameCallback((_) {
     }
   }
 
+  final selectedColors = <String, String>{}.obs;
+  final colors = <String, List<String>>{}.obs;
+
+  // Remove product from cart
   void removeProduct(String productId) {
     productsList.removeWhere((item) => item.products.id == productId);
+    selectedColors.remove(productId); // Remove associated color
   }
 
-  final selectedColor = ''.obs; // Observable for the selected color
-  final colors = <String>[].obs; // Observable list of colors
-
-  // Method to update the selected color
-  void updateSelectedColor(String color) {
-    selectedColor.value = color;
-  }
-
-  // Method to update the colors list
-  void setColors(List<String> newColors) {
-    colors.value = newColors;
+  // Set available colors for a product
+  void setColors(String productId, List<String> newColors) {
+    colors[productId] = newColors;
     if (newColors.isNotEmpty) {
-      selectedColor.value = newColors[0]; // Default to the first color
+      selectedColors[productId] = newColors.first; // Default first color
     }
   }
 
-  final productSize = ''.obs;
-  final sizeList = <String>[].obs;
-
-  void changeProductSize(String size) {
-    productSize.value = size;
+  // Update selected color when user changes it
+  void updateSelectedColor(String productId, String color) {
+    selectedColors[productId] = color;
+    update(); // Notify UI
   }
 
-  void changeSizeList(List<String> neWsizeList) {
-    sizeList.value = neWsizeList;
-    if (neWsizeList.isNotEmpty) {
-      productSize.value = neWsizeList[0];
+  // Get selected color for a product
+  String getSelectedColor(String productId) {
+    return selectedColors[productId] ?? "Not Selected";
+  }
+
+  final seledtedSize = <String, String>{}.obs;
+  final productsSize = <String, List<String>>{}.obs;
+
+  void setProductsSize(String productId, List<String> setProdutsSize) {
+    productsSize[productId] = setProdutsSize;
+    if (setProdutsSize.isNotEmpty) {
+      seledtedSize[productId] = setProdutsSize.first;
     }
   }
+
+  void updateSize(String productsId, String size){
+    seledtedSize[productsId] = size;
+    update();
+
+  }
+
+
+    String getSelectedSize(String productId) {
+    return seledtedSize[productId] ?? "Not Selected";
+  }
+
+
+  Color hexToColor(String hex) {
+  hex = hex.replaceFirst('#', ''); // Remove the #
+  int colorInt = int.parse(hex, radix: 16); // Convert to integer
+  return Color(0xFF000000 | colorInt); // Ensure full opacity
+}
+
 }

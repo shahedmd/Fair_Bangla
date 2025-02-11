@@ -1,40 +1,35 @@
-import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../cartPage/getxCartControler.dart';
 
-class SizeDropdown extends StatelessWidget {
-  final sizeController = Get.put(CartControler());
+class SizeDropDown extends StatelessWidget {
+  final String productId;
 
-   SizeDropdown({super.key});
+  SizeDropDown({super.key, required this.productId});
+
+  final cartController = Get.find<CartControler>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      var productSize = cartController.productsSize[productId] ?? [];
+      var selectedSize = cartController.seledtedSize[productId] ?? '';
+
       return DropdownButton<String>(
-        alignment: Alignment.center,
-        
-        
-        value: sizeController.productSize.value.isNotEmpty
-            ? sizeController.productSize.value
-            : null, // Show the selected color
+        value: productSize.contains(selectedSize) ? selectedSize : null,
         hint: const Text("Select Color"),
         dropdownColor: Colors.white,
-        items: sizeController.sizeList.map((size) {
+        items: productSize.map((color) {
           return DropdownMenuItem<String>(
-            alignment: Alignment.center,
-            value: size,
-            child: SizedBox(
-              width: 20,
-              height: 20,
-              child: CustomText(inputText: size, color: Colors.black, fontWeight: FontWeight.bold, fontsize: 16),
-             
-            ),
+            value: color,
+            child: Text(color), // Show color as text
           );
         }).toList(),
         onChanged: (value) {
           if (value != null) {
-            sizeController.changeProductSize(value);
+            cartController.updateSize(productId, value);
           }
         },
       );

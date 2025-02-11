@@ -1,41 +1,35 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../cartPage/getxCartControler.dart';
 
 class ColorDropdown extends StatelessWidget {
-  final colorController = Get.put(CartControler());
+  final String productId;
 
-   ColorDropdown({super.key});
+  ColorDropdown({super.key, required this.productId});
+
+  final cartController = Get.find<CartControler>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      var productColors = cartController.colors[productId] ?? [];
+      var selectedColor = cartController.selectedColors[productId] ?? '';
+
       return DropdownButton<String>(
-        alignment: Alignment.center,
-        
-        value: colorController.selectedColor.value.isNotEmpty
-            ? colorController.selectedColor.value
-            : null, // Show the selected color
+        value: productColors.contains(selectedColor) ? selectedColor : null,
         hint: const Text("Select Color"),
         dropdownColor: Colors.white,
-        items: colorController.colors.map((color) {
+        items: productColors.map((color) {
           return DropdownMenuItem<String>(
-            alignment: Alignment.center,
             value: color,
-            child: Container(
-              width: 20,
-              height: 20,
-              margin: const EdgeInsets.only(right: 8.0),
-              decoration: BoxDecoration(
-                color: Color(int.parse(color.replaceFirst('#', '0xff'))),
-                shape: BoxShape.circle,
-              ),
-            ),
+            child: Text(color), // Show color as text
           );
         }).toList(),
         onChanged: (value) {
           if (value != null) {
-            colorController.updateSelectedColor(value);
+            cartController.updateSelectedColor(productId, value);
           }
         },
       );

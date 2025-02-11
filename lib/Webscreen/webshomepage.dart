@@ -1,9 +1,17 @@
+// ignore_for_file: unused_import
+
 import 'dart:async';
+import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
+import 'package:fair_bangla/Webscreen/login.dart';
+import 'package:fair_bangla/cartPage/cartPage.dart';
+import 'package:fair_bangla/cartPage/getxCartControler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../Elemnts/homePageProductsFetchControler.dart';
 import '../Elemnts/webElements.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WebHomePage extends StatefulWidget {
   const WebHomePage({super.key});
@@ -14,6 +22,7 @@ class WebHomePage extends StatefulWidget {
 
 class _WebHomePageState extends State<WebHomePage> {
   final elmentsControler = Get.find<Elements>();
+  
   late PageController pageController;
   late Timer timer;
 
@@ -33,6 +42,7 @@ class _WebHomePageState extends State<WebHomePage> {
         );
       }
     });
+
   }
 
   @override
@@ -44,6 +54,9 @@ class _WebHomePageState extends State<WebHomePage> {
 
   @override
   Widget build(BuildContext context) {
+  
+
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -96,9 +109,23 @@ class _WebHomePageState extends State<WebHomePage> {
 
            elmentsControler.bottomNavbar(),
 
+          
+
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.yellow,
+        child: const Icon(Icons.shop, color: Colors.black,),
+        onPressed: ()async{
+         if(elmentsControler.user.value == null){
+          Get.to( SignUpPage(getpage: const FairBanlgCart(),));
+         }
+         if(elmentsControler.user.value != null){
+           Get.to( const FairBanlgCart());
+         }
+       
+      }),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'Mobile Screen/mobilehomescreen.dart';
 import 'cartPage/getxCartControler.dart';
+import 'firebase.auth.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
          super.initState();
         
   Get.lazyPut(() => HomePageProductFetchControler());
+  Get.lazyPut(()=>AuthController());
 Get.put(CartControler());
   Get.put(Elements());
   }

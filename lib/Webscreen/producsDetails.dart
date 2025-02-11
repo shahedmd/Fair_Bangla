@@ -1,13 +1,14 @@
+// ignore_for_file: file_names
+
 import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
-import 'package:fair_bangla/Webscreen/productSize.dart';
 import 'package:fair_bangla/cartPage/getxCartControler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../Elemnts/webElements.dart';
-import 'colorsSelection.dart';
+import '../cartPage/cartPage.dart';
 
 // ignore: must_be_immutable
 class ProductsDetails extends StatefulWidget {
@@ -21,14 +22,14 @@ class ProductsDetails extends StatefulWidget {
 class _ProductsDetailsState extends State<ProductsDetails> {
   final elmentsControler = Get.find<Elements>();
   final cartController = Get.find<CartControler>();
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-
     super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    cartController.setColors(widget.products.colors);
-    cartController.changeSizeList(widget.products.size);
-  });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cartController.setColors(widget.products.id, widget.products.colors);
+      cartController.setProductsSize(widget.products.id, widget.products.size);
+    });
   }
 
   @override
@@ -48,7 +49,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                 children: [
                   SizedBox(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
                             inputText: widget.products.name,
@@ -76,27 +77,65 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                             )),
                         Row(
                           children: [
-                            Column(
-                              children: [
-                                CustomText(
-                                    inputText: "Product Size",
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontsize: 15),
-                                SizeDropdown()
-                              ],
+                            CustomText(
+                                inputText: "Product Colors",
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontsize: 15),
+                            SizedBox(
+                              width: 20.w,
                             ),
-                            SizedBox(width: 20.w,),
-                            Column(
-                              children: [
-                                CustomText(
-                                    inputText: "Color Family",
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontsize: 15),
-                                ColorDropdown()
-                              ],
-                            )
+                            SizedBox(
+                              height: 30.h,
+                              width: 120.w,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.products.colors.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.all(5.r),
+                                    width: 20.w,
+                                    color: cartController.hexToColor(
+                                        widget.products.colors[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          children: [
+                            CustomText(
+                                inputText: "Product Size",
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontsize: 15),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              width: 120.w,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.products.colors.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 5.h, left: 5.w),
+                                    child: CustomText(
+                                        inputText: widget.products.size[index]
+                                            .toString(),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontsize: 15),
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -200,18 +239,13 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        Row(
-                          children: [
-                            elmentsControler
-                                .customButton("Add To Cart", Colors.black, () {
-                            cartController.addProduct(widget.products, context);
-                            }, Colors.white),
-                            SizedBox(
-                              width: 30.w,
-                            ),
-                            elmentsControler.customButton(
-                                "Order Now", Colors.black, () {}, Colors.white),
-                          ],
+                        elmentsControler
+                            .customButton("Add To Cart", Colors.black, () {
+                                                     cartController.addProduct(widget.products, context);
+
+                        }, Colors.white),
+                        SizedBox(
+                          width: 30.w,
                         )
                       ],
                     ),
@@ -219,11 +253,22 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                 ],
               ),
             ),
-            SizedBox(height: 80.h,),
+            SizedBox(
+              height: 80.h,
+            ),
             elmentsControler.bottomNavbar()
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.yellow,
+          child: const Icon(
+            Icons.shop,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Get.to(const FairBanlgCart());
+          }),
     );
   }
 }
