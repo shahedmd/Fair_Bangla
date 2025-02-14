@@ -10,7 +10,6 @@ import '../Webscreen/colorsSelection.dart';
 import 'getxCartControler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class FairBanlgCart extends StatefulWidget {
   const FairBanlgCart({super.key});
 
@@ -30,7 +29,6 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
           children: [
             elementControler.navbar(),
             SizedBox(height: 40.h),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,65 +40,98 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
 
                   return SizedBox(
                     height: 750.h,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    
+                    width: MediaQuery.of(context).size.width * 0.7,
                     child: ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 20.h),
                       itemCount: cartControler.productsList.length,
                       itemBuilder: (context, index) {
                         final item = cartControler.productsList[index];
                         final productId = item.products.id;
 
-                        return ListTile(
-                          leading: Image.network(item.products.url),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(item.products.name),
-                              Text('\$${item.products.price.toStringAsFixed(2)}'),
-                            ],
-                          ),
-                          subtitle: Row(
-                            children: [
-                              
-                              ColorDropdown(productId: productId), 
-                              SizedBox(width: 10.w,),
-                              SizeDropDown(productId: productId)
-                            ],
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () {
-                                  cartControler.updateQuantity(productId, item.quantity - 1);
-                                },
-                              ),
-                              Text(
-                                item.quantity.toString(),
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () {
-                                  cartControler.updateQuantity(productId, item.quantity + 1);
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  cartControler.removeProduct(productId);
-                                },
-                              ),
-                            ],
+                        return Padding(
+                          padding:  EdgeInsets.all(20.0.r),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: const  Color.fromARGB(255, 252, 242, 148),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15.r))),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  height: 200.h,
+                                  width: 200.w,
+                                  child: Image.network(item.products.url),
+                                ),
+                                SizedBox(
+                                  width: 100.w,
+                                ),
+                                Column(
+                                  children: [
+                                    CustomText(
+                                        inputText: item.products.name,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontsize: 15),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    CustomText(
+                                        inputText:
+                                            '\$${item.products.price.toStringAsFixed(2)}',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontsize: 15)
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 100.w,
+                                ),
+                                Column(
+                                  children: [
+                                    ColorDropdown(productId: productId),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    SizeDropDown(productId: productId)
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 80.w,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.remove, color: Colors.black,),
+                                  onPressed: () {
+                                    cartControler.updateQuantity(
+                                        productId, item.quantity - 1);
+                                  },
+                                ),
+                                Text(
+                                  item.quantity.toString(),
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add, color: Colors.black,),
+                                  onPressed: () {
+                                    cartControler.updateQuantity(
+                                        productId, item.quantity + 1);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.black,),
+                                  onPressed: () {
+                                    cartControler.removeProduct(productId);
+                                  },
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
                     ),
                   );
                 }),
-
                 SizedBox(width: 50.w),
-
                 Container(
                   height: 400.h,
                   width: 280.w,
@@ -114,7 +145,8 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                     children: [
                       Obx(() {
                         return CustomText(
-                          inputText: 'Total: \$${cartControler.total.toStringAsFixed(2)}',
+                          inputText:
+                              'Total: \$${cartControler.total.toStringAsFixed(2)}',
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontsize: 25,
@@ -122,7 +154,8 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                       }),
                       SizedBox(height: 15.h),
                       CustomText(
-                        inputText: "Total Items: ${cartControler.productsList.length}",
+                        inputText:
+                            "Total Items: ${cartControler.productsList.length}",
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontsize: 20,
@@ -132,9 +165,12 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                 ),
               ],
             ),
+SizedBox(height:40.h),
+            elementControler.bottomNavbar()
           ],
         ),
       ),
+
     );
   }
 }

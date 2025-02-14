@@ -18,6 +18,7 @@ class ColorDropdown extends StatelessWidget {
       var selectedColor = cartController.selectedColors[productId] ?? '';
 
       return DropdownButton<String>(
+        
         value: productColors.contains(selectedColor) ? selectedColor : null,
         hint: const Text("Select Color"),
         dropdownColor: Colors.white,

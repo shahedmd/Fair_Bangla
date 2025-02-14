@@ -92,11 +92,14 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: widget.products.colors.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.all(5.r),
-                                    width: 20.w,
-                                    color: cartController.hexToColor(
-                                        widget.products.colors[index]),
+                                  return Tooltip(
+                                    message: "Go to cart to select color",
+                                    child: Container(
+                                      margin: EdgeInsets.all(5.r),
+                                      width: 20.w,
+                                      color: cartController.hexToColor(
+                                          widget.products.colors[index]),
+                                    ),
                                   );
                                 },
                               ),
@@ -104,7 +107,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                           ],
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 25.h,
                         ),
                         Row(
                           children: [
@@ -123,15 +126,18 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: widget.products.colors.length,
                                 itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding:
-                                        EdgeInsets.only(right: 5.h, left: 5.w),
-                                    child: CustomText(
-                                        inputText: widget.products.size[index]
-                                            .toString(),
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontsize: 15),
+                                  return Tooltip(
+                                    message: "Go to cart to select size",
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 5.h, left: 5.w),
+                                      child: CustomText(
+                                          inputText: widget.products.size[index]
+                                              .toString(),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontsize: 15),
+                                    ),
                                   );
                                 },
                               ),

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart ';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -19,9 +21,12 @@ class AuthController extends GetxController{
 
     // Show a SnackBar indicating loading
     ScaffoldMessenger.of(context).showSnackBar(
+    
       SnackBar(
+        backgroundColor: Colors.white,
+        
         content: CustomText(
-          inputText: 'Logging in...',
+          inputText: 'Sign Up...',
           fontWeight: FontWeight.bold,
           fontsize: 13,
           color: Colors.black,
@@ -56,13 +61,14 @@ class AuthController extends GetxController{
        // ignore: use_build_context_synchronously
        ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        backgroundColor: Colors.yellow,
         content: CustomText(
           inputText: e.toString(),
           fontWeight: FontWeight.bold,
           fontsize: 13,
           color: Colors.black,
         ),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 4),
       ),
     );
     }
@@ -72,6 +78,24 @@ class AuthController extends GetxController{
   }
 
     Future<User?> signIn(String email, String password, Widget getPage,BuildContext context) async {
+       isloading.value = true;
+
+    // Show a SnackBar indicating loading
+    ScaffoldMessenger.of(context).showSnackBar(
+    
+      SnackBar(
+        backgroundColor: Colors.white,
+                behavior: SnackBarBehavior.floating,
+
+        content: CustomText(
+          inputText: 'Logging in...',
+          fontWeight: FontWeight.bold,
+          fontsize: 13,
+          color: Colors.black,
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+    );
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -83,18 +107,23 @@ class AuthController extends GetxController{
       return userCredential.user;
 
     } catch (e) {
-
- ScaffoldMessenger.of(context).showSnackBar(
+      
+             ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        backgroundColor: Colors.yellow,
+        behavior: SnackBarBehavior.floating,
         content: CustomText(
           inputText: e.toString(),
           fontWeight: FontWeight.bold,
           fontsize: 13,
           color: Colors.black,
         ),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 4),
       ),
-    );      
+    );
+
+          isloading.value = false;
+
     return null;
     }
   }

@@ -32,11 +32,11 @@ class _MyAppState extends State<MyApp> {
         
   Get.lazyPut(() => HomePageProductFetchControler());
   Get.lazyPut(()=>AuthController());
-Get.put(CartControler());
+Get.put(CartControler());  
   Get.put(Elements());
   }
 
-
+ 
 
   @override
   Widget build(BuildContext context) {

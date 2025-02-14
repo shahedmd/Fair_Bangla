@@ -250,6 +250,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
+         SizedBox( height: 40.h),
+             elementscontroller.bottomNavbar()
             ],
           ),
         ),

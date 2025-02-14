@@ -26,13 +26,12 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
-            elementsController.navbar(),
+              elementsController.navbar(),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Container(
@@ -71,7 +70,7 @@ class _LoginState extends State<Login> {
                                     child: TextFormField(
                                       validator: (value) {
                                         RegExp regex = RegExp(_emailPattern);
-            
+
                                         if (value == null ||
                                             !regex.hasMatch(value)) {
                                           return 'Please enter some text';
@@ -79,7 +78,8 @@ class _LoginState extends State<Login> {
                                         return null;
                                       },
                                       controller: emailinfoecom,
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                       decoration: const InputDecoration(
                                           contentPadding: EdgeInsets.all(20.0),
                                           border: InputBorder.none),
@@ -106,29 +106,36 @@ class _LoginState extends State<Login> {
                                         return null;
                                       },
                                       controller: passwordcontroller,
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                       decoration: const InputDecoration(
                                           contentPadding: EdgeInsets.all(20.0),
                                           border: InputBorder.none),
                                     )),
                               ],
                             )),
-                       
-                        
                         SizedBox(
                           height: 15.h,
                         ),
                         Obx(() => authcontler.isloading.value
                             ? const CircularProgressIndicator()
-                            : elementsController.customButton("Login", Colors.black, () {
-                               authcontler.signIn(emailinfoecom.text,
-                                      passwordcontroller.text, const WebHomePage(), context);
-                             }, Colors.yellow))
+                            : elementsController
+                                .customButton("Login", Colors.black, () {
+                                if (_formKey.currentState!.validate()) {
+                                  authcontler.signIn(
+                                      emailinfoecom.text,
+                                      passwordcontroller.text,
+                                      const WebHomePage(),
+                                      context);
+                                }
+                              }, Colors.yellow))
                       ],
                     ),
                   ),
                 ),
               ),
+              SizedBox( height: 40.h),
+              elementsController.bottomNavbar()
             ],
           ),
         ),
