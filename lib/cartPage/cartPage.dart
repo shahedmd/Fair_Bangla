@@ -89,7 +89,7 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                                 ),
                                 Column(
                                   children: [
-                                    ColorDropdown(productId: productId),
+                                    Text(cartControler.selectedColors[productId].toString()),
                                     SizedBox(
                                       height: 10.h,
                                     ),
@@ -137,7 +137,7 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                   width: 280.w,
                   padding: EdgeInsets.all(16.w),
                   decoration: BoxDecoration(
-                    color: Colors.yellow,
+                    color: const   Color.fromARGB(255, 252, 242, 148),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(

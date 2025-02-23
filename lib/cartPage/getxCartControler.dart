@@ -1,8 +1,10 @@
 // ignore_for_file: file_names
 
-import 'package:fair_bangla/Elemnts/datamodel.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:fair_bangla/Elemnts/datamodel.dart';
 
 class CartProduct {
   Products products;
@@ -12,16 +14,33 @@ class CartProduct {
     required this.products,
     this.quantity = 1,
   });
+
+  Map<String, dynamic> toJson() => {
+        "products": products.toJson(),
+        "quantity": quantity,
+      };
+
+  factory CartProduct.fromJson(Map<String, dynamic> json) {
+    return CartProduct(
+      products: Products.fromJson(json["products"]),
+      quantity: json["quantity"],
+    );
+  }
 }
 
 class CartControler extends GetxController {
   var productsList = <CartProduct>[].obs;
+  final box = GetStorage();
 
-  // Get total cart price
+  @override
+  void onInit() {
+    super.onInit();
+    loadCart();
+  }
+
   double get total => productsList.fold(
       0, (sum, item) => sum + item.products.price * item.quantity);
 
-  // Add a product to the cart
   void addProduct(Products product, BuildContext context) {
     final index =
         productsList.indexWhere((item) => item.products.id == product.id);
@@ -31,8 +50,10 @@ class CartControler extends GetxController {
       productsList.add(CartProduct(products: product, quantity: 1));
     }
 
+    saveCart();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return; // Prevent errors when widget is unmounted
+      if (!context.mounted) return;
       showDialog(
         context: context,
         builder: (context) {
@@ -52,7 +73,6 @@ class CartControler extends GetxController {
     });
   }
 
-  // Update product quantity
   void updateQuantity(String productId, int quantity) {
     final index =
         productsList.indexWhere((item) => item.products.id == productId);
@@ -63,36 +83,43 @@ class CartControler extends GetxController {
         productsList[index].quantity = quantity;
         productsList.refresh();
       }
+      saveCart();
     }
+  }
+
+  void removeProduct(String productId) {
+    productsList.removeWhere((item) => item.products.id == productId);
+    selectedColors.remove(productId);
+    saveCart();
   }
 
   final selectedColors = <String, String>{}.obs;
   final colors = <String, List<String>>{}.obs;
 
-  // Remove product from cart
-  void removeProduct(String productId) {
-    productsList.removeWhere((item) => item.products.id == productId);
-    selectedColors.remove(productId); // Remove associated color
+void setColors(String productId, List<String> newColors) {
+  colors[productId] = newColors;
+  if (newColors.isNotEmpty) {
+    selectedColors[productId] = newColors.first;
+  } else {
+    selectedColors.remove(productId); // Remove if no colors available
   }
 
-  // Set available colors for a product
-  void setColors(String productId, List<String> newColors) {
-    colors[productId] = newColors;
-    if (newColors.isNotEmpty) {
-      selectedColors[productId] = newColors.first; // Default first color
-    }
-  }
+  saveCart();
+}
 
-  // Update selected color when user changes it
+
   void updateSelectedColor(String productId, String color) {
     selectedColors[productId] = color;
-    update(); // Notify UI
+    saveCart();
+    update();
   }
 
-  // Get selected color for a product
-  String getSelectedColor(String productId) {
-    return selectedColors[productId] ?? "Not Selected";
-  }
+String getSelectedColor(String productId) {
+  String selectedColor = selectedColors[productId] ?? "Not Selected";
+  print("Selected Color for $productId: $selectedColor");
+  return selectedColor;
+}
+
 
   final seledtedSize = <String, String>{}.obs;
   final productsSize = <String, List<String>>{}.obs;
@@ -104,22 +131,44 @@ class CartControler extends GetxController {
     }
   }
 
-  void updateSize(String productsId, String size){
+  void updateSize(String productsId, String size) {
     seledtedSize[productsId] = size;
     update();
-
   }
 
-
-    String getSelectedSize(String productId) {
+  String getSelectedSize(String productId) {
     return seledtedSize[productId] ?? "Not Selected";
   }
 
+  void saveCart() {
+    List<Map<String, dynamic>> cartData =
+        productsList.map((item) => item.toJson()).toList();
+    box.write("cart", jsonEncode(cartData));
+    box.write("selectedColors", jsonEncode(selectedColors));
+  }
 
-  Color hexToColor(String hex) {
-  hex = hex.replaceFirst('#', ''); // Remove the #
-  int colorInt = int.parse(hex, radix: 16); // Convert to integer
-  return Color(0xFF000000 | colorInt); // Ensure full opacity
+void loadCart() {
+  String? storedCart = box.read("cart");
+  String? storedColors = box.read("selectedColors");
+
+  // Debug logs
+  print("Stored Cart: $storedCart");
+  print("Stored Colors: $storedColors");
+
+  if (storedCart != null) {
+    List<dynamic> decoded = jsonDecode(storedCart);
+    productsList.assignAll(decoded.map((e) => CartProduct.fromJson(e)).toList());
+  }
+
+  if (storedColors != null) {
+    selectedColors.assignAll(Map<String, String>.from(jsonDecode(storedColors)));
+  }
 }
 
+
+  Color hexToColor(String hex) {
+    hex = hex.replaceFirst('#', '');
+    int colorInt = int.parse(hex, radix: 16);
+    return Color(0xFF000000 | colorInt);
+  }
 }

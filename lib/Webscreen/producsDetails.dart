@@ -82,9 +82,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontsize: 15),
-                            SizedBox(
-                              width: 20.w,
-                            ),
+                            SizedBox(width: 20.w),
                             SizedBox(
                               height: 30.h,
                               width: 120.w,
@@ -92,52 +90,34 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: widget.products.colors.length,
                                 itemBuilder: (context, index) {
-                                  return Tooltip(
-                                    message: "Go to cart to select color",
-                                    child: Container(
-                                      margin: EdgeInsets.all(5.r),
-                                      width: 20.w,
-                                      color: cartController.hexToColor(
-                                          widget.products.colors[index]),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 25.h,
-                        ),
-                        Row(
-                          children: [
-                            CustomText(
-                                inputText: "Product Size",
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontsize: 15),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            SizedBox(
-                              height: 30.h,
-                              width: 120.w,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.products.colors.length,
-                                itemBuilder: (context, index) {
-                                  return Tooltip(
-                                    message: "Go to cart to select size",
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 5.h, left: 5.w),
-                                      child: CustomText(
-                                          inputText: widget.products.size[index]
-                                              .toString(),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontsize: 15),
-                                    ),
+                                  String colorHex =
+                                      widget.products.colors[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      // Update selected color using GetX controller
+                                      cartController.updateSelectedColor(
+                                          widget.products.id, colorHex);
+                                    },
+                                    child: Obx(() {
+                                      // Highlight selected color
+                                      return Container(
+                                        margin: EdgeInsets.all(5.r),
+                                        width: 20.w,
+                                       
+                                        decoration: BoxDecoration(
+                                           color:
+                                            cartController.hexToColor(colorHex),
+                                          border: cartController
+                                                      .getSelectedColor(
+                                                          widget.products.id) ==
+                                                  colorHex
+                                              ? Border.all(
+                                                  color: Colors.black,
+                                                  width: 2) // Example highlight
+                                              : null,
+                                        ),
+                                      );
+                                    }),
                                   );
                                 },
                               ),
@@ -247,8 +227,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                         ),
                         elmentsControler
                             .customButton("Add To Cart", Colors.black, () {
-                                                     cartController.addProduct(widget.products, context);
-
+                          cartController.addProduct(widget.products, context);
                         }, Colors.white),
                         SizedBox(
                           width: 30.w,

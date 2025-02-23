@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../Webscreen/aboutuspage.dart';
 import '../Webscreen/userprofile.dart';
 
 class Elements extends GetxController {
@@ -107,14 +108,7 @@ class Elements extends GetxController {
             SizedBox(
               width: 200.w,
             ),
-            CustomText(
-                inputText: "CATALOGUE",
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontsize: 18),
-            SizedBox(
-              width: 70.w,
-            ),
+           
             CustomText(
                 inputText: "FASHION",
                 color: Colors.black,
@@ -136,6 +130,19 @@ class Elements extends GetxController {
                 color: Colors.black,
                 fontWeight: FontWeight.normal,
                 fontsize: 18),
+            SizedBox(
+              width: 70.w,
+            ),
+             InkWell(
+              onTap: (){
+                Get.to(()=> const  AboutUsPage());
+              },
+               child: CustomText(
+                  inputText: "About Us",
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontsize: 18),
+             ),
             SizedBox(
               width: 70.w,
             ),
@@ -501,18 +508,7 @@ class Elements extends GetxController {
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                       SizedBox(height: 10.h),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 10.w),
-                          customButton("Order Now", Colors.black, () {
-                            Get.to(ProductsDetails(
-                              products: product,
-                            ));
-                          }, Colors.yellow)
-                        ],
-                      )
+                      
                     ],
                   ),
                 ),

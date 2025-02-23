@@ -1,5 +1,6 @@
 import 'package:fair_bangla/Elemnts/homePageProductsFetchControler.dart';
 import 'package:fair_bangla/Elemnts/webElements.dart';
+import 'package:get_storage/get_storage.dart';
 import 'Webscreen/webshomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +15,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+    runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
