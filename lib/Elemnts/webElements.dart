@@ -17,6 +17,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../Webscreen/aboutuspage.dart';
+import '../Webscreen/fashion pages/babyproducts.dart';
+import '../Webscreen/fashion pages/beautyproducts.dart';
+import '../Webscreen/fashion pages/femalecollection.dart';
+import '../Webscreen/fashion pages/gentscollection.dart';
 import '../Webscreen/userprofile.dart';
 
 class Elements extends GetxController {
@@ -28,6 +32,20 @@ class Elements extends GetxController {
   final cartControler = Get.find<CartControler>();
   final authController = Get.find<AuthController>();
   Rx<User?> user = Rx<User?>(FirebaseAuth.instance.currentUser);
+
+  RxBool bool1 = false.obs;
+  RxBool bool2 = false.obs;
+  RxBool bool3 = false.obs;
+  RxBool bool4 = false.obs;
+
+  RxBool isHover1 = false.obs;
+  RxBool isHover2 = false.obs;
+  RxBool isHover3 = false.obs;
+  RxBool isHover4 = false.obs;
+
+  void onHoverd(RxBool boolValue) {
+    boolValue.value = true;
+  }
 
   Future<void> fetchUrls() async {
     try {
@@ -53,8 +71,7 @@ class Elements extends GetxController {
           querySnapshot.docs.map((doc) => doc['url'] as String).toList();
 
       brandBannerList.value = urls;
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   @override
@@ -90,7 +107,7 @@ class Elements extends GetxController {
     );
   }
 
-  Widget navbar(){
+  Widget navbar() {
     return SizedBox(
       height: 100.h,
       child: Row(
@@ -108,53 +125,101 @@ class Elements extends GetxController {
             SizedBox(
               width: 200.w,
             ),
-           
-            CustomText(
-                inputText: "FASHION",
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontsize: 18),
-            SizedBox(
-              width: 70.w,
-            ),
-            CustomText(
-                inputText: "FOOD",
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontsize: 18),
-            SizedBox(
-              width: 70.w,
-            ),
-            CustomText(
-                inputText: "ELECTRONICS",
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontsize: 18),
-            SizedBox(
-              width: 70.w,
-            ),
-             InkWell(
-              onTap: (){
-                Get.to(()=> const  AboutUsPage());
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => onHoverd(bool1),
+              onExit: (_) {
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  if (!isHover1.value) {
+                    bool1.value = false;
+                  }
+                });
               },
-               child: CustomText(
+              child: CustomText(
+                  inputText: "FASHION",
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontsize: 18),
+            ),
+            SizedBox(
+              width: 70.w,
+            ),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => onHoverd(bool2),
+              onExit: (_) {
+                Future.delayed(
+                  const Duration(milliseconds: 200),
+                  () {
+                    if (!isHover2.value) {
+                      bool2.value = false;
+                    }
+                  },
+                );
+              },
+              child: CustomText(
+                  inputText: "FOOD",
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontsize: 18),
+            ),
+            SizedBox(
+              width: 70.w,
+            ),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => onHoverd(bool3),
+              onExit: (_) {
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  if (!isHover3.value) {
+                    bool3.value = false;
+                  }
+                });
+              },
+              child: CustomText(
+                  inputText: "ELECTRONICS",
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontsize: 18),
+            ),
+            SizedBox(
+              width: 70.w,
+            ),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => bool4.value = true,
+              onExit: (_) {
+                Future.delayed(
+                  const Duration(milliseconds: 200),
+                  () {
+                    if (!isHover4.value) {
+                      bool4.value = false;
+                    }
+                  },
+                );
+              },
+              child: CustomText(
                   inputText: "About Us",
                   color: Colors.black,
                   fontWeight: FontWeight.normal,
                   fontsize: 18),
-             ),
+            ),
             SizedBox(
               width: 70.w,
             ),
             user.value == null
                 ? customButton("Log In", Colors.yellow, () {
-                  Get.to(const Login());
-                }, Colors.black)
+                    Get.to(const Login());
+                  }, Colors.black)
                 : InkWell(
-                  onTap: (){
-                    Get.to(()=> const  UserProfile());
-                  },
-                  child: CustomText(inputText: "User Profile", color: Colors.black, fontWeight: FontWeight.bold, fontsize: 18))
+                    onTap: () {
+                      Get.to(() => const UserProfile());
+                    },
+                    child: CustomText(
+                        inputText: "User Profile",
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontsize: 18))
           ]),
     );
   }
@@ -167,6 +232,9 @@ class Elements extends GetxController {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 80.h,
+            ),
             CustomText(
                 inputText: "LET'S",
                 color: Colors.black,
@@ -508,7 +576,8 @@ class Elements extends GetxController {
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                       SizedBox(height: 10.h),
-                      
+                      customButton(
+                          "Shop Now", Colors.black, () {}, Colors.yellow)
                     ],
                   ),
                 ),
@@ -517,6 +586,171 @@ class Elements extends GetxController {
           },
         );
       },
+    );
+  }
+
+  Widget customContainer(
+      Color color, double height, List<Map<String, dynamic>> items) {
+    return AnimatedContainer(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(15.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 10,
+            spreadRadius: 4,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      curve: Curves.bounceIn,
+      height: height.h * items.length.h,
+      width: 200.w,
+      duration: const Duration(seconds: 2),
+      child: Padding(
+        padding: EdgeInsets.all(30.r),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: items.map((item) {
+              return Column(
+                children: [
+                  InkWell(
+                    onTap: () => Get.to(() => item['route'] as Widget),
+                    child: CustomText(
+                      inputText: item['text'],
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontsize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 30.h),
+                ],
+              );
+            }).toList()),
+      ),
+    );
+  }
+
+  Widget customDropdown() {
+    return SizedBox(
+      height: 900.h,
+      width: 700.w,
+      child: Stack(
+        children: [
+          MouseRegion(
+            onEnter: (_) => isHover1.value = true,
+            onExit: (_) {
+              Future.delayed(const Duration(milliseconds: 300), () {
+                isHover1.value = false;
+                bool1.value = false;
+              });
+            },
+            child: Obx(() => bool1.value
+                ? customContainer(
+                    Colors.yellow,
+                    120,
+                    [
+                      {
+                        'text': 'Gents Collection',
+                        'route': const GentsCollection()
+                      },
+                      {
+                        'text': 'Fe-male Collection',
+                        'route': const FemaleCollection()
+                      },
+                      {
+                        'text': 'Beauty Products',
+                        'route': const BeautyProducts()
+                      },
+                      {'text': 'Baby Products', 'route': const BabyProducts()}
+                    ],
+                  )
+                : const SizedBox()),
+          ),
+          Positioned(
+              left: 146.w,
+              child: MouseRegion(
+                  onEnter: (_) => isHover2.value = true,
+                  onExit: (_) {
+                    Future.delayed(const Duration(microseconds: 300), () {
+                      isHover2.value = false;
+                      bool2.value = false;
+                    });
+                  },
+                  child: Obx(() => bool2.value
+                      ? customContainer(Colors.yellow, 120, [
+                          {
+                            'text': 'Organic Oils',
+                            'route': const GentsCollection()
+                          },
+                          {'text': 'Honey', 'route': const FemaleCollection()},
+                          {
+                            'text': 'Seeds & Dry Powders',
+                            'route': const BeautyProducts()
+                          },
+                        ])
+                      : const SizedBox()))),
+          Positioned(
+              left: 260.w,
+              child: MouseRegion(
+                  onEnter: (_) => isHover3.value = true,
+                  onExit: (_) {
+                    Future.delayed(
+                      const Duration(milliseconds: 300),
+                      () {
+                        isHover3.value = false;
+                        bool3.value = false;
+                      },
+                    );
+                  },
+                  child: Obx(() => bool3.value
+                      ? customContainer(Colors.yellow, 120, [
+                          {'text': 'Laptops', 'route': const GentsCollection()},
+                          {
+                            'text': 'Computer Items',
+                            'route': const FemaleCollection()
+                          },
+                          {
+                            'text': 'Mobile Phone',
+                            'route': const BeautyProducts()
+                          },
+                          {'text': 'Gadget', 'route': const BeautyProducts()},
+                          {
+                            'text': 'Home Accessories',
+                            'route': const BeautyProducts()
+                          }
+                        ])
+                      : const SizedBox()))),
+          Positioned(
+              left: 450.w,
+              child: MouseRegion(
+                  onEnter: (_) => isHover4.value = true,
+                  onExit: (_) {
+                    Future.delayed(
+                      const Duration(milliseconds: 300),
+                      () {
+                        isHover4.value = false;
+                        bool4.value = false;
+                      },
+                    );
+                  },
+                  child: Obx(() => bool4.value
+                      ? customContainer(Colors.yellow, 120, [
+                          {'text': 'Contact Us', 'route': const AboutUsPage()},
+                          {
+                            'text': 'Privacy and Policy',
+                            'route': const FemaleCollection()
+                          },
+                          {
+                            'text': 'Rerurn Policy',
+                            'route': const BeautyProducts()
+                          },
+                        ])
+                      : const SizedBox())))
+        ],
+      ),
     );
   }
 }

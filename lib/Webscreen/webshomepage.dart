@@ -22,7 +22,7 @@ class WebHomePage extends StatefulWidget {
 
 class _WebHomePageState extends State<WebHomePage> {
   final elmentsControler = Get.find<Elements>();
-  
+
   late PageController pageController;
   late Timer timer;
 
@@ -31,10 +31,11 @@ class _WebHomePageState extends State<WebHomePage> {
     super.initState();
     pageController = PageController(initialPage: 0);
 
-  
+    // Timer to auto-scroll pages smoothly
     timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (pageController.hasClients) {
-        int nextPage = ((pageController.page ?? 0).toInt() + 1) % elmentsControler.urlList.length;
+        int nextPage = ((pageController.page ?? 0).toInt() + 1) %
+            elmentsControler.urlList.length;
         pageController.animateToPage(
           nextPage,
           duration: const Duration(milliseconds: 500),
@@ -42,7 +43,6 @@ class _WebHomePageState extends State<WebHomePage> {
         );
       }
     });
-
   }
 
   @override
@@ -54,78 +54,104 @@ class _WebHomePageState extends State<WebHomePage> {
 
   @override
   Widget build(BuildContext context) {
-  
-
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            elmentsControler.navbar(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                elmentsControler.landingBody(),
-                SizedBox(
-                  width: 300.w,
-                ),
-                SizedBox(
-                  width: 500.w,
-                  height: 600.h,
-                  child: Obx(() {
-                    if (elmentsControler.urlList.isEmpty) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+            SizedBox(
+              height: 900.h,
+              width: 1300.w,
+              child: Stack(
+                children: [
+                  elmentsControler.navbar(),
+                  Positioned(
+                    top: 120.h,
+                    left: 0.w,
+                    right: 0.w,
+                    bottom: 0.h,
+                    child: SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          elmentsControler.landingBody(),
+                          SizedBox(
+                            width: 300.w,
+                          ),
+                          SizedBox(
+                            width: 500.w,
+                            height: 600.h,
+                            child: Obx(() {
+                              if (elmentsControler.urlList.isEmpty) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
 
-                    return PageView.builder(
-                      controller: pageController,
-                      itemCount: elmentsControler.urlList.length,
-                      itemBuilder: (context, index) {
-                        return Image.network(
-                          elmentsControler.urlList[index], 
-                          fit: BoxFit.scaleDown,
-                        );
-                      },
-                    );
-                  }),
-                ),
-               
-              ],
+                              return  PageView.builder(
+                                controller: pageController,
+                                itemCount: elmentsControler.urlList.length,
+                                itemBuilder: (context, index) {
+                                  // Loop the index smoothly
+                                  int loopIndex = index % elmentsControler.urlList.length;
+                                  return Image.network(
+                                    elmentsControler.urlList[loopIndex],
+                                    fit: BoxFit.scaleDown,
+                                  );
+                                },
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 80.h,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 455.w),
+                      child: elmentsControler.customDropdown(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-             SizedBox(height: 100.h),
+            SizedBox(height: 100.h),
             elmentsControler.brandBanner(),
-            SizedBox(height: 50.h,),
-
-            CustomText(inputText: "YOUNG'S FAV!", color: Colors.yellow, fontWeight: FontWeight.bold, fontsize: 26),
-
-            SizedBox(height: 30.h,),
-            
+            SizedBox(
+              height: 50.h,
+            ),
+            CustomText(
+                inputText: "YOUNG'S FAV!",
+                color: Colors.yellow,
+                fontWeight: FontWeight.bold,
+                fontsize: 26),
+            SizedBox(
+              height: 30.h,
+            ),
             elmentsControler.homePageProductList(),
-
-              SizedBox(height: 50.h,),
-
-            
-
-           elmentsControler.bottomNavbar(),
-
-          
-
+            SizedBox(
+              height: 50.h,
+            ),
+            elmentsControler.bottomNavbar(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.yellow,
-        child: const Icon(Icons.shop, color: Colors.black,),
-        onPressed: ()async{
-         if(elmentsControler.user.value == null){
-          Get.to( SignUpPage(getpage: const FairBanlgCart(),));
-         }
-         if(elmentsControler.user.value != null){
-           Get.to( const FairBanlgCart());
-         }
-       
-      }),
+          backgroundColor: Colors.yellow,
+          child: const Icon(
+            Icons.shop,
+            color: Colors.black,
+          ),
+          onPressed: () async {
+            if (elmentsControler.user.value == null) {
+              Get.to(SignUpPage(
+                getpage: const FairBanlgCart(),
+              ));
+            }
+            if (elmentsControler.user.value != null) {
+              Get.to(const FairBanlgCart());
+            }
+          }),
     );
   }
 }

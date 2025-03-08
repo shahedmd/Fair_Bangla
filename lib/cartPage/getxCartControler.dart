@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:fair_bangla/Elemnts/datamodel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CartProduct {
   Products products;
@@ -96,17 +97,16 @@ class CartControler extends GetxController {
   final selectedColors = <String, String>{}.obs;
   final colors = <String, List<String>>{}.obs;
 
-void setColors(String productId, List<String> newColors) {
-  colors[productId] = newColors;
-  if (newColors.isNotEmpty) {
-    selectedColors[productId] = newColors.first;
-  } else {
-    selectedColors.remove(productId); // Remove if no colors available
+  void setColors(String productId, List<String> newColors) {
+    colors[productId] = newColors;
+    if (newColors.isNotEmpty) {
+      selectedColors[productId] = newColors.first;
+    } else {
+      selectedColors.remove(productId); // Remove if no colors available
+    }
+
+    saveCart();
   }
-
-  saveCart();
-}
-
 
   void updateSelectedColor(String productId, String color) {
     selectedColors[productId] = color;
@@ -114,12 +114,10 @@ void setColors(String productId, List<String> newColors) {
     update();
   }
 
-String getSelectedColor(String productId) {
-  String selectedColor = selectedColors[productId] ?? "Not Selected";
-  print("Selected Color for $productId: $selectedColor");
-  return selectedColor;
-}
-
+  String getSelectedColor(String productId) {
+    String selectedColor = selectedColors[productId] ?? "Not Selected";
+    return selectedColor;
+  }
 
   final seledtedSize = <String, String>{}.obs;
   final productsSize = <String, List<String>>{}.obs;
@@ -129,10 +127,13 @@ String getSelectedColor(String productId) {
     if (setProdutsSize.isNotEmpty) {
       seledtedSize[productId] = setProdutsSize.first;
     }
+
+    saveCart();
   }
 
   void updateSize(String productsId, String size) {
     seledtedSize[productsId] = size;
+    saveCart();
     update();
   }
 
@@ -145,30 +146,99 @@ String getSelectedColor(String productId) {
         productsList.map((item) => item.toJson()).toList();
     box.write("cart", jsonEncode(cartData));
     box.write("selectedColors", jsonEncode(selectedColors));
+    box.write("selectedSize", jsonEncode(seledtedSize));
   }
 
-void loadCart() {
-  String? storedCart = box.read("cart");
-  String? storedColors = box.read("selectedColors");
+  void loadCart() {
+    String? storedCart = box.read("cart");
+    String? storedColors = box.read("selectedColors");
+    String? storeSize = box.read("selectedSize");
 
-  // Debug logs
-  print("Stored Cart: $storedCart");
-  print("Stored Colors: $storedColors");
+    if (storedCart != null) {
+      List<dynamic> decoded = jsonDecode(storedCart);
+      productsList
+          .assignAll(decoded.map((e) => CartProduct.fromJson(e)).toList());
+    }
 
-  if (storedCart != null) {
-    List<dynamic> decoded = jsonDecode(storedCart);
-    productsList.assignAll(decoded.map((e) => CartProduct.fromJson(e)).toList());
+    if (storedColors != null) {
+      selectedColors
+          .assignAll(Map<String, String>.from(jsonDecode(storedColors)));
+    }
+    if (storeSize != null) {
+      seledtedSize.assignAll(Map<String, String>.from(jsonDecode(storeSize)));
+    }
   }
-
-  if (storedColors != null) {
-    selectedColors.assignAll(Map<String, String>.from(jsonDecode(storedColors)));
-  }
-}
-
 
   Color hexToColor(String hex) {
     hex = hex.replaceFirst('#', '');
     int colorInt = int.parse(hex, radix: 16);
     return Color(0xFF000000 | colorInt);
+  }
+
+  void sendtomessenger(BuildContext context) async {
+    final Uri url = Uri.parse("https://m.me/61573828326251");
+
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Error",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              content: const Text("Something went wrong cant send message"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      });
+    }
+
+   
+  }
+
+
+
+
+
+
+
+
+    void sendtowhatsapp(BuildContext context) async {
+    final Uri url = Uri.parse("https://wa.me/8801995767837");
+
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Error",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              content: const Text("Something went wrong cant send message"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      });
+    }
+
+   
   }
 }

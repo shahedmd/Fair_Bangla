@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
    
    @override
   void initState() {
-         super.initState();
+         super.initState();  
         
   Get.lazyPut(() => HomePageProductFetchControler());
   Get.lazyPut(()=>AuthController());

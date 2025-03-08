@@ -7,13 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'Elemnts/helpingwidgets.dart';
 import 'usermodel.dart';
-class AuthController extends GetxController{
-   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+class AuthController extends GetxController {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  RxBool isloading = false.obs;
 
-    RxBool isloading = false.obs;
-
+  String error = "";
   // Sign up with email and password
   Future<User?> signUp(String email, String password, String name, String phone,
       String address, BuildContext context, Widget getpage) async {
@@ -21,10 +22,8 @@ class AuthController extends GetxController{
 
     // Show a SnackBar indicating loading
     ScaffoldMessenger.of(context).showSnackBar(
-    
       SnackBar(
         backgroundColor: Colors.white,
-        
         content: CustomText(
           inputText: 'Sign Up...',
           fontWeight: FontWeight.bold,
@@ -51,42 +50,50 @@ class AuthController extends GetxController{
           'uid': user.uid
         });
 
-        Get.to( getpage);
-
+        Get.to(getpage);
       }
 
       return user;
-    } catch (e) {
-      
-       // ignore: use_build_context_synchronously
-       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.yellow,
-        content: CustomText(
-          inputText: e.toString(),
-          fontWeight: FontWeight.bold,
-          fontsize: 13,
-          color: Colors.black,
-        ),
-        duration: const Duration(seconds: 4),
-      ),
-    );
-    }
-        isloading.value = false;
-        return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-credential') {
+        error = "Enter correct email or password";
+      }
 
+      if(e.code == 'email-already-in-use'){
+        error = "Email is already in use";
+      } 
+
+      else{
+        error = "Something went wrong";
+      }
+      
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.yellow,
+          content: CustomText(
+            inputText: error,
+            fontWeight: FontWeight.bold,
+            fontsize: 13,
+            color: Colors.black,
+          ),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    }
+    isloading.value = false;
+    return null;
   }
 
-    Future<User?> signIn(String email, String password, Widget getPage,BuildContext context) async {
-       isloading.value = true;
+  Future<User?> signIn(String email, String password, Widget getPage,
+      BuildContext context) async {
+    isloading.value = true;
 
     // Show a SnackBar indicating loading
     ScaffoldMessenger.of(context).showSnackBar(
-    
       SnackBar(
         backgroundColor: Colors.white,
-                behavior: SnackBarBehavior.floating,
-
+        behavior: SnackBarBehavior.floating,
         content: CustomText(
           inputText: 'Logging in...',
           fontWeight: FontWeight.bold,
@@ -101,45 +108,43 @@ class AuthController extends GetxController{
         email: email,
         password: password,
       );
-      if(userCredential.user != null){
+      if (userCredential.user != null) {
         Get.to(getPage);
       }
       return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-credential') {
+        error = "Enter correct email or password";
+      }
+     
 
-    } catch (e) {
-      
-             ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+
+      Get.snackbar(
+        "Error", // Title
+        error, // Message
         backgroundColor: Colors.yellow,
-        behavior: SnackBarBehavior.floating,
-        content: CustomText(
-          inputText: e.toString(),
-          fontWeight: FontWeight.bold,
-          fontsize: 13,
-          color: Colors.black,
-        ),
+        colorText: Colors.black,
+        snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 4),
-      ),
-    );
+      );
 
-          isloading.value = false;
+      isloading.value = false;
 
-    return null;
+      return null;
     }
   }
 
-
-  Future getuser() async{
+  Future getuser() async {
     final currentuser = FirebaseAuth.instance.currentUser;
 
-        DocumentSnapshot doc = await FirebaseFirestore.instance.collection('fairbanglaUser').doc(currentuser!.uid).get();
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('fairbanglaUser')
+        .doc(currentuser!.uid)
+        .get();
 
-         if(doc.exists){
-          return UserDAta.fromFirestore( doc.data() as Map<String, dynamic> );
-        }
-        return null;
-
+    if (doc.exists) {
+      return UserDAta.fromFirestore(doc.data() as Map<String, dynamic>);
+    }
+    return null;
   }
-
-
 }

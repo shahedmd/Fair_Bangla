@@ -1,12 +1,10 @@
 // Import statements...
 // ignore_for_file: file_names
 
-import 'package:fair_bangla/Webscreen/productSize.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Elemnts/helpingwidgets.dart';
 import '../Elemnts/webElements.dart';
-import '../Webscreen/colorsSelection.dart';
 import 'getxCartControler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -40,7 +38,6 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
 
                   return SizedBox(
                     height: 750.h,
-                    
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: ListView.builder(
                       padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -50,10 +47,10 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                         final productId = item.products.id;
 
                         return Padding(
-                          padding:  EdgeInsets.all(20.0.r),
+                          padding: EdgeInsets.all(20.0.r),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: const  Color.fromARGB(255, 252, 242, 148),
+                                color: const Color.fromARGB(255, 252, 242, 148),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15.r))),
                             child: Row(
@@ -89,18 +86,23 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                                 ),
                                 Column(
                                   children: [
-                                    Text(cartControler.selectedColors[productId].toString()),
+                                    Text(cartControler.selectedColors[productId]
+                                        .toString()),
                                     SizedBox(
                                       height: 10.h,
                                     ),
-                                    SizeDropDown(productId: productId)
+                                    Text(cartControler.seledtedSize[productId]
+                                        .toString()),
                                   ],
                                 ),
                                 SizedBox(
                                   width: 80.w,
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.remove, color: Colors.black,),
+                                  icon: const Icon(
+                                    Icons.remove,
+                                    color: Colors.black,
+                                  ),
                                   onPressed: () {
                                     cartControler.updateQuantity(
                                         productId, item.quantity - 1);
@@ -111,14 +113,20 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.add, color: Colors.black,),
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                  ),
                                   onPressed: () {
                                     cartControler.updateQuantity(
                                         productId, item.quantity + 1);
                                   },
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.black,),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.black,
+                                  ),
                                   onPressed: () {
                                     cartControler.removeProduct(productId);
                                   },
@@ -132,45 +140,51 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                   );
                 }),
                 SizedBox(width: 50.w),
-                Container(
-                  height: 400.h,
-                  width: 280.w,
-                  padding: EdgeInsets.all(16.w),
-                  decoration: BoxDecoration(
-                    color: const   Color.fromARGB(255, 252, 242, 148),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(() {
-                        return CustomText(
-                          inputText:
-                              'Total: \$${cartControler.total.toStringAsFixed(2)}',
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontsize: 25,
-                        );
-                      }),
-                      SizedBox(height: 15.h),
-                      CustomText(
-                        inputText:
-                            "Total Items: ${cartControler.productsList.length}",
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontsize: 20,
+                Column(
+                  children: [
+                    Container(
+                      height: 400.h,
+                      width: 280.w,
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 252, 242, 148),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
-                  ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Obx(() {
+                            return CustomText(
+                              inputText:
+                                  'Total: \$${cartControler.total.toStringAsFixed(2)}',
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontsize: 25,
+                            );
+                          }),
+                          SizedBox(height: 15.h),
+                          CustomText(
+                            inputText:
+                                "Total Items: ${cartControler.productsList.length}",
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontsize: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 20.h,),
+                    elementControler.customButton("Order Now", Colors.black, () { }, Colors.yellow)
+                  ],
                 ),
               ],
             ),
-SizedBox(height:40.h),
+            SizedBox(height: 40.h),
             elementControler.bottomNavbar()
           ],
         ),
       ),
-
     );
   }
 }
