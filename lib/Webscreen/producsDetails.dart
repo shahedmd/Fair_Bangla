@@ -350,7 +350,11 @@ class _ProductsDetailsState extends State<ProductsDetails> {
               height: 30.h,
             ),
             ordernow(() {
-              Get.to(()=> CashOnDelivery(  products: widget.products,  ));
+              Get.to(() => CashOnDelivery(
+                    products: widget.products,
+                    selectedColor: cartController.selectedColors,
+                    selectedSize: cartController.seledtedSize,
+                  ));
             }, "Cash On Delivery"),
             SizedBox(
               height: 80.h,

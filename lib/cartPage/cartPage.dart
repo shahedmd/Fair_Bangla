@@ -1,6 +1,7 @@
 // Import statements...
 // ignore_for_file: file_names
 
+import 'package:fair_bangla/Webscreen/finalorder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Elemnts/helpingwidgets.dart';
@@ -173,9 +174,13 @@ class _FairBanlgCartState extends State<FairBanlgCart> {
                         ],
                       ),
                     ),
-
-                    SizedBox(height: 20.h,),
-                    elementControler.customButton("Order Now", Colors.black, () { }, Colors.yellow)
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    elementControler.customButton("Order Now", Colors.black,
+                        () {
+                      Get.to(() => const FinalOrder());
+                    }, Colors.yellow)
                   ],
                 ),
               ],

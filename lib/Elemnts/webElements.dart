@@ -753,4 +753,8 @@ class Elements extends GetxController {
       ),
     );
   }
+
+
+
+  
 }
