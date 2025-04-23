@@ -15,7 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../Webscreen/aboutuspage.dart';
 import '../Webscreen/fashion pages/babyproducts.dart';
 import '../Webscreen/fashion pages/beautyproducts.dart';
@@ -27,7 +26,7 @@ class Elements extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   RxList urlList = <String>[].obs;
 
-  final homePageProductControler = Get.find<HomePageProductFetchControler>();
+final homePageProductController = Get.put(HomePageProductFetchControler());
 
   final cartControler = Get.find<CartControler>();
   final authController = Get.find<AuthController>();
@@ -79,7 +78,6 @@ class Elements extends GetxController {
     super.onInit();
     fetchUrls();
     fetchdataBrandlogolist();
-    homePageProductControler.fetchProducts();
 
     FirebaseAuth.instance.authStateChanges().listen((User? newUser) {
       user.value = newUser;
@@ -494,51 +492,63 @@ class Elements extends GetxController {
     );
   }
 
-  Widget homePageProductList() {
-    return FutureBuilder(
-      future: homePageProductControler.fetchProducts(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+Widget homePageProductList() {
+  final orientation = MediaQuery.of(Get.context!).orientation;
+
+  return Column(
+    children: [
+      Padding(
+          padding: EdgeInsets.all(30.0.r),
+          child: TextField(
+            onChanged: (value) =>
+                homePageProductController.filterSearchResults(value),
+            decoration: InputDecoration(
+              hintText: "Search products...",
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
+      Obx(() {
+        if (homePageProductController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-        if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
+
+        if (homePageProductController.filteredProducts.isEmpty) {
           return const Center(child: Text('No products found.'));
         }
-
-        List<Products> productsData = snapshot.data!;
-        final orientation = MediaQuery.of(context).orientation;
 
         return GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: (180.w / 280.h),
-              crossAxisCount: (orientation == Orientation.portrait) ? 2 : 4,
-              crossAxisSpacing: 30.w,
-              mainAxisSpacing: 30.h),
-          itemCount: productsData.length,
+            childAspectRatio: (180.w / 280.h),
+            crossAxisCount: (orientation == Orientation.portrait) ? 2 : 4,
+            crossAxisSpacing: 30.w,
+            mainAxisSpacing: 30.h,
+          ),
+          itemCount: homePageProductController.filteredProducts.length,
           itemBuilder: (context, index) {
-            Products product = productsData[index];
+            Products product =
+                homePageProductController.filteredProducts[index];
             return Padding(
               padding: EdgeInsets.all(20.r),
               child: InkWell(
                 onTap: () {
                   if (user.value == null) {
                     Get.to(SignUpPage(
-                      getpage: ProductsDetails(products: product),
-                    ));
-                  }
-                  if (user.value != null) {
+                        getpage: ProductsDetails(products: product)));
+                  } else {
                     Get.to(ProductsDetails(products: product));
                   }
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.all(Radius.circular(20.r))),
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -551,12 +561,11 @@ class Elements extends GetxController {
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
                             return const Center(
-                                child:
-                                    CircularProgressIndicator()); // Show loader
+                                child: CircularProgressIndicator());
                           },
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset(
-                              'assets/images/placeholder.png', // Placeholder image
+                              'assets/images/placeholder.png',
                               height: 220.h,
                               width: 160.w,
                               fit: BoxFit.contain,
@@ -577,7 +586,7 @@ class Elements extends GetxController {
                           color: Colors.black),
                       SizedBox(height: 10.h),
                       customButton(
-                          "Shop Now", Colors.black, () {}, Colors.yellow)
+                          "Shop Now", Colors.black, () {}, Colors.yellow),
                     ],
                   ),
                 ),
@@ -585,9 +594,11 @@ class Elements extends GetxController {
             );
           },
         );
-      },
-    );
-  }
+      }),
+    ],
+  );
+}
+
 
   Widget customContainer(
       Color color, double height, List<Map<String, dynamic>> items) {

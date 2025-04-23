@@ -134,6 +134,10 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
+
   Future getuser() async {
     final currentuser = FirebaseAuth.instance.currentUser;
 

@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class CartProduct {
   Products products;
   int quantity;
@@ -31,9 +32,10 @@ class CartProduct {
 }
 
 class CartControler extends GetxController {
+  
   var productsList = <CartProduct>[].obs;
   final box = GetStorage();
- 
+
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void onInit() {
@@ -42,7 +44,9 @@ class CartControler extends GetxController {
   }
 
   double get total => productsList.fold(
-      0, (sum, item) => sum + item.products.price * item.quantity);
+      // ignore: avoid_types_as_parameter_names
+      0,
+      (sum, item) => sum + item.products.price * item.quantity);
 
   void addProduct(Products product, BuildContext context) {
     final index =
@@ -203,18 +207,9 @@ class CartControler extends GetxController {
         );
       });
     }
-
-   
   }
 
-
-
-
-
-
-
-
-    void sendtowhatsapp(BuildContext context) async {
+  void sendtowhatsapp(BuildContext context) async {
     final Uri url = Uri.parse("https://wa.me/8801995767837");
 
     try {
@@ -240,60 +235,71 @@ class CartControler extends GetxController {
         );
       });
     }
-
-   
   }
 
-
-
-
-
-
-
-
-
-    Future<void> sendOrderToFirestore() async {
+  Future<void> sendOrderToFirestore() async {
     if (productsList.isEmpty) {
-      Get.snackbar("Error", "Your cart is empty!", snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Error", "Your cart is empty!",
+          snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
     try {
-      
-          await FirebaseFirestore.instance.collection("orders").add({
-      "orderId": user!.uid,
-      "items": productsList.map((item) {
-              String productId = item.products.id;
-        return {
-          "id": item.products.id,
-          "name": item.products.name,
-          "price": item.products.price,
-          "quantity": item.quantity,
-          "imageUrl": item.products.url,
-          "selectedColor": selectedColors[productId] ?? "No Color Selected",
-          "selectedSize": seledtedSize[productId] ?? "No Size Selected",
-        };
-      }).toList(),
-      "total": total,
-      "status": "Pending",
-      "timestamp": FieldValue.serverTimestamp(),
-    });
+      await FirebaseFirestore.instance.collection("orders").add({
+        "orderId": user!.uid,
+        "items": productsList.map((item) {
+          String productId = item.products.id;
+          return {
+            "id": item.products.id,
+            "name": item.products.name,
+            "price": item.products.price,
+            "quantity": item.quantity,
+            "imageUrl": item.products.url,
+            "selectedColor": selectedColors[productId] ?? "No Color Selected",
+            "selectedSize": seledtedSize[productId] ?? "No Size Selected",
+          };
+        }).toList(),
+        "total": total,
+        "status": "Pending",
+        "timestamp": FieldValue.serverTimestamp(),
+      });
 
-      productsList.clear(); 
-    selectedColors.clear();
-    seledtedSize.clear();
-    saveCart();
-  
+      productsList.clear();
+      selectedColors.clear();
+      seledtedSize.clear();
+      saveCart();
 
-      Get.snackbar("Success", "Order placed successfully!", snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Success", "Order placed successfully!",
+          snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      Get.snackbar("Error", "Failed to send order: $e", snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Error", "Failed to send order: $e",
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-
-
-
-
-  
+  Future<void> sendCODfiresotre(String id, String name, double price,
+      String imageUrl, int quantity, int total, String produtsid) async {
+    try {
+      await FirebaseFirestore.instance.collection("orders").add({
+        "orderId": user!.uid,
+        "items": [
+          {
+            "id": id,
+            "name": name,
+            "price": price,
+            "quantity": quantity,
+            "imageUrl": imageUrl,
+            "selectedColor": selectedColors[produtsid] ?? "No Color Selected",
+            "selectedSize": seledtedSize[produtsid] ?? "No Size Selected",
+          }
+        ],
+        "total": total,
+        "status": "Pending",
+        "timestamp": FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      Get.snackbar("Error", "Failed to send order: $e",
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
 }

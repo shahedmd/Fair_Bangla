@@ -1,3 +1,4 @@
+import 'package:fair_bangla/Webscreen/signinpage.dart';
 import 'package:fair_bangla/firebase.auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,220 +39,216 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             children: [
               elementscontroller.navbar(),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.all(Radius.circular(30.r))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CustomText(
-                            inputText: "Sign Up",
-                            fontsize: 25,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                CustomText(
-                                    inputText: "Enter Your Name",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-                                        return null;
-                                      },
-                                      controller: nameinfoecom,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
-                                    )),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                CustomText(
-                                    inputText: "Enter Your Email",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        RegExp regex = RegExp(_emailPattern);
+              Container(
+                                padding:  EdgeInsets.symmetric(vertical: 30.h),
 
-                                        if (value == null ||
-                                            !regex.hasMatch(value)) {
-                                          return 'Please enter some text';
-                                        }
-                                        return null;
-                                      },
-                                      controller: emailinfoecom,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
-                                    )),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                CustomText(
-                                    inputText: "Enter Your Password",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-                                        return null;
-                                      },
-                                      controller: passwordcontroler,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
-                                    )),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                CustomText(
-                                    inputText: "Enter Your Address",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-                                        return null;
-                                      },
-                                      controller: addressinfoecom,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
-                                    )),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                CustomText(
-                                    inputText: "Enter Your Number",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter correct number';
-                                        }
-                                        return null;
-                                      },
-                                      controller: phoneinfoecom,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
-                                    )),
-                              ],
-                            )),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        SizedBox(
-                          width: 600.w,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomText(
-                                  inputText: "Already have an account",
-                                  fontsize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              CustomText(
-                                  inputText: "Login Now",
-                                  fontsize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Obx(() => authcontler.isloading.value
-                            ? const CircularProgressIndicator()
-                            : elementscontroller.customButton("Signup", Colors.black, () async { 
-                                 if (_formKey.currentState!.validate()) {
-                                    await authcontler.signUp(
-                                        emailinfoecom.text,
-                                        passwordcontroler.text,
-                                        nameinfoecom.text,
-                                        phoneinfoecom.text,
-                                        addressinfoecom.text,
-                                        context,
-                                        widget.getpage);
-                                  }
-                            }, Colors.yellow))
-                      ],
+                decoration: BoxDecoration(
+                    color: Colors.yellow.shade300,
+                    borderRadius: BorderRadius.all(Radius.circular(30.r))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomText(
+                        inputText: "Sign Up",
+                        fontsize: 25,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                    SizedBox(
+                      height: 20.h,
                     ),
-                  ),
+                    Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            
+                            SizedBox(
+                                width: 400.w,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  controller: nameinfoecom,
+                                  style:
+                                      const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Enter your name',
+                                                                            labelStyle: TextStyle(color: Colors.black),
+
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), 
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SizedBox(
+                                width: 400.w,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    RegExp regex = RegExp(_emailPattern);
+
+                                    if (value == null ||
+                                        !regex.hasMatch(value)) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  controller: emailinfoecom,
+                                  style:
+                                      const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Enter your email',
+                                                                            labelStyle: TextStyle(color: Colors.black),
+
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), 
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SizedBox(
+                                width: 400.w,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  controller: passwordcontroler,
+                                  style:
+                                      const TextStyle(color: Colors.black),
+                                   decoration: const InputDecoration(
+                                    labelText: 'Enter your password',
+                                                                            labelStyle: TextStyle(color: Colors.black),
+
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), 
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SizedBox(
+                                width:400.w,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  controller: addressinfoecom,
+                                  style:
+                                      const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Enter your address',
+                                                                            labelStyle: TextStyle(color: Colors.black),
+
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), 
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SizedBox(
+                                width: 400.w,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter correct number';
+                                    }
+                                    return null;
+                                  },
+                                  controller: phoneinfoecom,
+                                  style:
+                                      const TextStyle(color: Colors.black),
+                                 decoration: const InputDecoration(
+                                    labelText: 'Enter your phone',
+                                                                            labelStyle: TextStyle(color: Colors.black),
+
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), 
+                                    ),
+                                  ),
+                                )),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    SizedBox(
+                      width: 600.w,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                              inputText: "Already have an account",
+                              fontsize: 12,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          InkWell(
+                            onTap: ()=> Get.to(()=>  const Login()),
+                            child: CustomText(
+                                inputText: "Login Now",
+                                fontsize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    Obx(() => authcontler.isloading.value
+                        ? const CircularProgressIndicator()
+                        : elementscontroller
+                            .customButton("Signup", Colors.black, () async {
+                            if (_formKey.currentState!.validate()) {
+                              await authcontler.signUp(
+                                  emailinfoecom.text,
+                                  passwordcontroler.text,
+                                  nameinfoecom.text,
+                                  phoneinfoecom.text,
+                                  addressinfoecom.text,
+                                  context,
+                                  widget.getpage);
+                            }
+                          }, Colors.yellow))
+                  ],
                 ),
               ),
-         SizedBox( height: 40.h),
-             elementscontroller.bottomNavbar()
+              SizedBox(height: 70.h),
+              elementscontroller.bottomNavbar()
             ],
           ),
         ),

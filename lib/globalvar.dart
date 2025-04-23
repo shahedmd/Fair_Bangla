@@ -9,7 +9,7 @@ var myorderslist = <CartProduct>[].obs;
 var isloading = false.obs;
 
 User? user = FirebaseAuth.instance.currentUser;
-void sendtocashonDelivery(
+ Future<void> sendtocashonDelivery(
   String name,
   String add,
   String email,

@@ -1,3 +1,4 @@
+import 'package:fair_bangla/Webscreen/login.dart';
 import 'package:fair_bangla/Webscreen/webshomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,14 +33,16 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               elementsController.navbar(),
+              SizedBox(height: 120.h,),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Container(
+                
                   decoration: BoxDecoration(
-                      color: Colors.yellow,
+                      color: Colors.yellow.shade300,
                       borderRadius: BorderRadius.all(Radius.circular(30.r))),
                   child: Padding(
-                    padding: const EdgeInsets.all(30),
+                    padding:  EdgeInsets.symmetric(vertical: 50.h),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,23 +53,15 @@ class _LoginState extends State<Login> {
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                         SizedBox(
-                          height: 20.h,
+                          height: 40.h,
                         ),
                         Form(
                             key: _formKey,
                             child: Column(
                               children: [
-                                CustomText(
-                                    inputText: "Enter Your Email",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                               
                                 SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
+                                    width: 400.w,
                                     child: TextFormField(
                                       validator: (value) {
                                         RegExp regex = RegExp(_emailPattern);
@@ -79,25 +74,25 @@ class _LoginState extends State<Login> {
                                       },
                                       controller: emailinfoecom,
                                       style:
-                                          const TextStyle(color: Colors.white),
+                                          const TextStyle(color: Colors.black),
                                       decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
+                                        labelText: 'Enter your e-mail',
+                                        labelStyle: TextStyle(color: Colors.black),
+                                        border: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors
+                                                  .black), 
+                                        ),
+                                      ),
                                     )),
                                 SizedBox(
-                                  height: 20.h,
+                                  height: 40.h,
                                 ),
-                                CustomText(
-                                    inputText: "Enter Your Password",
-                                    fontsize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                                
+                              
                                 SizedBox(
-                                  height: 5.h,
-                                ),
-                                Container(
-                                    color: Colors.black,
-                                    width: 620.w,
+                                    width: 400.w,
                                     child: TextFormField(
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -107,13 +102,48 @@ class _LoginState extends State<Login> {
                                       },
                                       controller: passwordcontroller,
                                       style:
-                                          const TextStyle(color: Colors.white),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          border: InputBorder.none),
+                                          const TextStyle(color: Colors.black),
+                                       decoration: const InputDecoration(
+                                        labelText: 'Enter your password',
+                                                                                labelStyle: TextStyle(color: Colors.black),
+
+                                        border: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors
+                                                  .black), 
+                                        ),
+                                      ),
                                     )),
                               ],
                             )),
+                            SizedBox(height: 25.h,),
+                             SizedBox(
+                          width: 600.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomText(
+                                  inputText: "Doesn't have an account ",
+                                  fontsize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              InkWell(
+                                onTap: (){
+                                  Get.to(()=> SignUpPage(getpage: const  WebHomePage(),));
+                                },
+                                child: CustomText(
+                                    inputText: "Create Now",
+                                    fontsize: 12,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
                         SizedBox(
                           height: 15.h,
                         ),
@@ -134,7 +164,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox( height: 40.h),
+              SizedBox( height: 150.h),
               elementsController.bottomNavbar()
             ],
           ),

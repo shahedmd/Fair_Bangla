@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
@@ -91,13 +93,14 @@ class OrderModel {
 
 class OrderController extends GetxController {
   var orders = <OrderModel>[].obs;
-  var isLoading = true.obs;
+  var isLoading = false.obs;
 
   Future<void> fetchOrders(String userId) async {
     isLoading.value = true;
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('orders')
         .where('orderId', isEqualTo: userId)
+        .orderBy('timestamp',  descending: true)
         .get();
 
     orders.value = snapshot.docs.map((doc) {

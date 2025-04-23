@@ -8,7 +8,6 @@ import 'package:fair_bangla/firebase.auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import '../globalvar.dart';
 import '../usermodel.dart';
 
@@ -292,9 +291,8 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                                                 "No size selected");
                                           }
                                           return CustomText(
-                                              inputText: widget
-                                                  .selectedSize.values
-                                                  .join(', '),
+                                              inputText: widget.selectedSize[
+                                                  widget.products.id],
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
                                               fontsize: 16);
@@ -310,9 +308,9 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                                             return const Text("No size colors");
                                           }
                                           return CustomText(
-                                              inputText: widget
-                                                  .selectedColor.values
-                                                  .join(', '),
+                                              inputText: widget.selectedColor[
+                                                      widget.products.id]
+                                                  .toString(),
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
                                               fontsize: 16);
@@ -439,20 +437,32 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                   SizedBox(
                     height: 50.h,
                   ),
-                  ordernow(() {
+                  ordernow(() async {
+                    await cartController.sendCODfiresotre(
+                      widget.products.id,
+                      widget.products.name,
+                      widget.products.price,
+                      widget.products.url,
+                      quantity.value,
+                      totalbill.value,
+                      widget.products.id,
+                    );
+
+                    // ignore: use_build_context_synchronously
                     sendtocashonDelivery(
                         userData.value!.username,
                         userData.value!.address,
                         userData.value!.email,
                         userData.value!.phone,
                         widget.products.name,
-                        widget.selectedSize.value.toString(),
-                        widget.selectedColor.value.toString(),
+                        widget.selectedSize[widget.products.id] ??
+                            "No selected Size",
+                        widget.selectedColor[widget.products.id] ??
+                            "No selected Color",
                         widget.products.price.toString(),
                         totalbill.toString(),
                         quantity.toString(),
-                        context
-                        );
+                        context);
                   }, "Order Now"),
                   SizedBox(
                     height: 80.h,
