@@ -33,9 +33,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
          super.initState();  
         
-  Get.lazyPut(() => HomePageProductFetchControler());
-  Get.lazyPut(()=>AuthController());
-Get.put(CartControler());  
+Get.lazyPut(() => HomePageProductFetchControler());
+Get.lazyPut(()=>AuthController());
+Get.put(CartControler());   
   Get.put(Elements());
   }
 

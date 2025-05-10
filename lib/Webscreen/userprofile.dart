@@ -101,7 +101,7 @@ class _UserProfileState extends State<UserProfile> {
                                           inputText:
                                               userdata.username.toString(),
                                           fontsize: 15,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.normal,
                                           color: Colors.black),
                                       SizedBox(
                                         height: 20.h,
@@ -109,16 +109,16 @@ class _UserProfileState extends State<UserProfile> {
                                       CustomText(
                                           inputText: userdata.email,
                                           color: Colors.black,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.normal,
                                           fontsize: 15),
                                       SizedBox(
                                         height: 20.h,
                                       ),
                                       CustomText(
-                                          inputText: "User ID: ${userdata.uid}",
+                                          inputText: "User ID:${userdata.uid}",
                                           color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontsize: 15)
+                                          fontWeight: FontWeight.normal,
+                                          fontsize: 14)
                                     ]),
                               ),
                               SizedBox(width: 80.w),
@@ -149,8 +149,8 @@ class _UserProfileState extends State<UserProfile> {
                                       ),
                                       CustomText(
                                           inputText: userdata.address,
-                                          fontsize: 15,
-                                          fontWeight: FontWeight.bold,
+                                          fontsize: 14,
+                                          fontWeight: FontWeight.normal,
                                           color: Colors.black),
                                       SizedBox(
                                         height: 20.h,
@@ -282,7 +282,7 @@ class _UserProfileState extends State<UserProfile> {
                                       CustomText(
                                           inputText: "No payment method added",
                                           fontsize: 15,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.normal,
                                           color: Colors.black),
                                       SizedBox(
                                         height: 20.h,
@@ -329,7 +329,7 @@ class _UserProfileState extends State<UserProfile> {
                                       CustomText(
                                           inputText: "My Orders",
                                           color: Colors.black,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.bold, 
                                           fontsize: 15),
                                       SizedBox(height: 15.h),
                                       elementsController.customButton(
@@ -376,7 +376,7 @@ class _UserProfileState extends State<UserProfile> {
                                       ),
                                       elementsController.customButton(
                                           "Logout", Colors.yellow, () {
-                                        auth.signOut();
+                                        auth.signOut(context);
                                       }, Colors.black)
                                     ]),
                               )
@@ -390,7 +390,7 @@ class _UserProfileState extends State<UserProfile> {
                 Positioned(
                   top: 80.h,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 475.w),
+                    padding: EdgeInsets.only(left: 470.w),
                     child: elementsController.customDropdown(),
                   ),
                 )

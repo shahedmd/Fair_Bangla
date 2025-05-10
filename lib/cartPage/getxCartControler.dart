@@ -46,6 +46,7 @@ class CartControler extends GetxController {
   double get total => productsList.fold(
       // ignore: avoid_types_as_parameter_names
       0,
+      // ignore: avoid_types_as_parameter_names
       (sum, item) => sum + item.products.price * item.quantity);
 
   void addProduct(Products product, BuildContext context) {
@@ -237,7 +238,7 @@ class CartControler extends GetxController {
     }
   }
 
-  Future<void> sendOrderToFirestore() async {
+  Future<void> sendOrderToFirestore(String transNum) async {
     if (productsList.isEmpty) {
       Get.snackbar("Error", "Your cart is empty!",
           snackPosition: SnackPosition.BOTTOM);
@@ -262,6 +263,7 @@ class CartControler extends GetxController {
         "total": total,
         "status": "Pending",
         "timestamp": FieldValue.serverTimestamp(),
+        "transNumber" : transNum
       });
 
       productsList.clear();

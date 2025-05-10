@@ -1,4 +1,6 @@
 // HomePageProductFetchController.dart
+// ignore_for_file: file_names, avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'datamodel.dart';

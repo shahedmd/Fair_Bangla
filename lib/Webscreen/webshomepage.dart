@@ -31,7 +31,6 @@ class _WebHomePageState extends State<WebHomePage> {
     super.initState();
     pageController = PageController(initialPage: 0);
 
-    // Timer to auto-scroll pages smoothly
     timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (pageController.hasClients) {
         int nextPage = ((pageController.page ?? 0).toInt() + 1) %
@@ -108,7 +107,7 @@ class _WebHomePageState extends State<WebHomePage> {
                   Positioned(
                     top: 80.h,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 475.w),
+                      padding: EdgeInsets.only(left: 470.w),
                       child: elmentsControler.customDropdown(),
                     ),
                   ),

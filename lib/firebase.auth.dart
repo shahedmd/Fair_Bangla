@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, duplicate_ignore
 
+import 'package:fair_bangla/Webscreen/login.dart';
+import 'package:fair_bangla/Webscreen/webshomepage.dart';
 import 'package:flutter/material.dart ';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -134,8 +136,23 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(context) async {
     await _auth.signOut();
+
+    await ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.yellow,
+          content: CustomText(
+            inputText: "Loging Our",
+            fontWeight: FontWeight.bold,
+            fontsize: 13,
+            color: Colors.black,
+          ),
+          duration: const Duration(seconds: 4),
+        ),
+      ).closed;
+
+    Get.to(SignUpPage(getpage: const WebHomePage()));
   }
 
   Future getuser() async {

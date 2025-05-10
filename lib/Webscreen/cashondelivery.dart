@@ -130,32 +130,32 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                                           inputText: "Customer Details",
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
-                                          fontsize: 20,
+                                          fontsize: 18,
                                         ),
                                         SizedBox(height: 15.h),
                                         CustomText(
                                             inputText:
                                                 userdata.username.toString(),
-                                            fontsize: 15,
-                                            fontWeight: FontWeight.bold,
+                                            fontsize: 14,
+                                            fontWeight: FontWeight.w400,
                                             color: Colors.black),
                                         SizedBox(
-                                          height: 20.h,
+                                          height: 16.h,
                                         ),
                                         CustomText(
                                             inputText: userdata.email,
                                             color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontsize: 15),
+                                            fontWeight: FontWeight.w400,
+                                            fontsize: 14),
                                         SizedBox(
-                                          height: 20.h,
+                                          height: 16.h,
                                         ),
                                         CustomText(
                                             inputText:
                                                 "User ID: ${userdata.uid}",
                                             color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontsize: 15)
+                                            fontWeight: FontWeight.w400,
+                                            fontsize: 14)
                                       ]),
                                 ),
                                 SizedBox(
@@ -199,15 +199,15 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                                             inputText: "Delivery Address",
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
-                                            fontsize: 20),
+                                            fontsize: 18),
                                         SizedBox(
-                                          height: 20.h,
+                                          height: 16.h,
                                         ),
                                         CustomText(
                                             inputText:
                                                 userdata.address.toString(),
-                                            fontsize: 15,
-                                            fontWeight: FontWeight.bold,
+                                            fontsize: 14,
+                                            fontWeight: FontWeight.w400,
                                             color: Colors.black),
                                       ]),
                                 )
@@ -229,7 +229,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                       inputText: "Order Details",
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontsize: 25),
+                      fontsize: 22),
                   SizedBox(
                     height: 20.h,
                   ),

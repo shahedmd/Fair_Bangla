@@ -1,11 +1,11 @@
 import 'package:fair_bangla/Elemnts/webElements.dart';
+import 'package:fair_bangla/Webscreen/payment/paymentapi.dart';
 import 'package:fair_bangla/cartPage/getxCartControler.dart';
 import 'package:fair_bangla/firebase.auth.dart';
 import 'package:fair_bangla/usermodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../Elemnts/helpingwidgets.dart';
 
 class FinalOrder extends StatefulWidget {
@@ -20,11 +20,7 @@ class _FinalOrderState extends State<FinalOrder> {
 
   final elements = Elements();
   final auth = AuthController();
-
-  final String bkashNumber = '01XXXXXXXXX';
-
-  var txnId = ''.obs;
-  TextEditingController txnIdController = TextEditingController();
+  final pay = PayApi();
 
   @override
   Widget build(BuildContext context) {
@@ -102,32 +98,32 @@ class _FinalOrderState extends State<FinalOrder> {
                                                 inputText: "Customer Details",
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
-                                                fontsize: 20,
+                                                fontsize: 18,
                                               ),
                                               SizedBox(height: 15.h),
                                               CustomText(
                                                   inputText: userdata.username
                                                       .toString(),
-                                                  fontsize: 15,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontsize: 14,
+                                                  fontWeight: FontWeight.normal,
                                                   color: Colors.black),
                                               SizedBox(
-                                                height: 20.h,
+                                                height: 16.h,
                                               ),
                                               CustomText(
                                                   inputText: userdata.email,
                                                   color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontsize: 15),
+                                                  fontWeight: FontWeight.normal,
+                                                  fontsize: 14),
                                               SizedBox(
-                                                height: 20.h,
+                                                height: 16.h,
                                               ),
                                               CustomText(
                                                   inputText:
                                                       "User ID: ${userdata.uid}",
                                                   color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontsize: 15)
+                                                  fontWeight: FontWeight.normal,
+                                                  fontsize: 14)
                                             ]),
                                       ),
                                       SizedBox(
@@ -166,21 +162,21 @@ class _FinalOrderState extends State<FinalOrder> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 25.h,
+                                                height: 20.h,
                                               ),
                                               CustomText(
                                                   inputText: "Delivery Address",
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold,
-                                                  fontsize: 20),
+                                                  fontsize: 18),
                                               SizedBox(
                                                 height: 20.h,
                                               ),
                                               CustomText(
                                                   inputText: userdata.address
                                                       .toString(),
-                                                  fontsize: 15,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontsize: 14,
+                                                  fontWeight: FontWeight.normal,
                                                   color: Colors.black),
                                             ]),
                                       )
@@ -206,9 +202,9 @@ class _FinalOrderState extends State<FinalOrder> {
                     }
 
                     return SizedBox(
-                      height: 550.h,
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: ListView.builder(
+                        shrinkWrap: true,
                         padding: EdgeInsets.symmetric(vertical: 20.h),
                         itemCount: cartController.productsList.length,
                         itemBuilder: (context, index) {
@@ -288,64 +284,15 @@ class _FinalOrderState extends State<FinalOrder> {
                         fontWeight: FontWeight.bold,
                         fontsize: 20,
                       )),
-                  Container(
-                    width: 400.w,
-                    padding: EdgeInsets.all(20.r),
-                    margin: EdgeInsets.symmetric(vertical: 40.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.payment, size: 60, color: Colors.pink),
-                        SizedBox(height: 20.h),
-                        const Text(
-                          'Send payment to:',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          bkashNumber,
-                          style:
-                              const TextStyle(fontSize: 20, color: Colors.pink),
-                        ),
-                        SizedBox(height: 20.h),
-                        const Text(
-                          'After sending payment, enter your transaction ID below.',
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 20.h),
-                        TextField(
-                          controller: txnIdController,
-                          onChanged: (val) => txnId.value = val,
-                          decoration: const InputDecoration(
-                            labelText: 'bKash Transaction ID',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        SizedBox(height: 20.h),
-                        Obx(() => ElevatedButton(
-                              onPressed: txnId.trim().isNotEmpty
-                                  ? cartController.sendOrderToFirestore
-                                  : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.pink,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12),
-                              ),
-                              child: const Text('Submit Payment Info'),
-                            )),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  Obx(
+                    ()=> pay.isloading.value ?
+                    const  Center(child: CircularProgressIndicator(),) : 
+                    elements.customButton("Make payment", Colors.pink, () {
+                      pay.initiatePayment(cartController.total);
+                    }, Colors.white)  
                   ),
                   SizedBox(
                     height: 30.h,

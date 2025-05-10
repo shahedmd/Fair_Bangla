@@ -25,6 +25,12 @@ class _LoginState extends State<Login> {
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
   final _formKey = GlobalKey<FormState>();
 
+  var obsText = true.obs;
+
+  void togglePasswordVisibility() {
+    obsText.value = !obsText.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,16 +39,17 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               elementsController.navbar(),
-              SizedBox(height: 120.h,),
+              SizedBox(
+                height: 120.h,
+              ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Container(
-                
                   decoration: BoxDecoration(
                       color: Colors.yellow.shade300,
                       borderRadius: BorderRadius.all(Radius.circular(30.r))),
                   child: Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 50.h),
+                    padding: EdgeInsets.symmetric(vertical: 50.h),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,7 +66,6 @@ class _LoginState extends State<Login> {
                             key: _formKey,
                             child: Column(
                               children: [
-                               
                                 SizedBox(
                                     width: 400.w,
                                     child: TextFormField(
@@ -77,48 +83,59 @@ class _LoginState extends State<Login> {
                                           const TextStyle(color: Colors.black),
                                       decoration: const InputDecoration(
                                         labelText: 'Enter your e-mail',
-                                        labelStyle: TextStyle(color: Colors.black),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black),
                                         border: OutlineInputBorder(),
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors
-                                                  .black), 
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
                                         ),
                                       ),
                                     )),
                                 SizedBox(
                                   height: 40.h,
                                 ),
-                                
-                              
                                 SizedBox(
                                     width: 400.w,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-                                        return null;
-                                      },
-                                      controller: passwordcontroller,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                       decoration: const InputDecoration(
-                                        labelText: 'Enter your password',
-                                                                                labelStyle: TextStyle(color: Colors.black),
-
-                                        border: OutlineInputBorder(),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors
-                                                  .black), 
+                                    child: Obx(
+                                      () => TextFormField(
+                                        obscureText: obsText.value,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter some text';
+                                          }
+                                          return null;
+                                        },
+                                        controller: passwordcontroller,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          suffixIcon: IconButton(
+                                            onPressed: togglePasswordVisibility,
+                                            icon: Icon(
+                                              obsText.value
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                            ),
+                                          ),
+                                          labelText: 'Enter your password',
+                                          labelStyle: const TextStyle(
+                                              color: Colors.black),
+                                          border: const OutlineInputBorder(),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.black),
+                                          ),
                                         ),
                                       ),
                                     )),
                               ],
                             )),
-                            SizedBox(height: 25.h,),
-                             SizedBox(
+                        SizedBox(
+                          height: 25.h,
+                        ),
+                        SizedBox(
                           width: 600.w,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -132,8 +149,10 @@ class _LoginState extends State<Login> {
                                 width: 20.w,
                               ),
                               InkWell(
-                                onTap: (){
-                                  Get.to(()=> SignUpPage(getpage: const  WebHomePage(),));
+                                onTap: () {
+                                  Get.to(() => SignUpPage(
+                                        getpage: const WebHomePage(),
+                                      ));
                                 },
                                 child: CustomText(
                                     inputText: "Create Now",
@@ -164,7 +183,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox( height: 150.h),
+              SizedBox(height: 150.h),
               elementsController.bottomNavbar()
             ],
           ),

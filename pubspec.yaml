@@ -46,6 +46,7 @@ dependencies:
   intl: ^0.19.0
   pdf: ^3.11.3
   printing: ^5.12.0
+  flutter_sslcommerz: ^2.4.4
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +88,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Schyler
+    - family: Inter
       fonts:
         - asset: font/Inter-Bold.ttf
         - asset: font/Inter-Medium.ttf

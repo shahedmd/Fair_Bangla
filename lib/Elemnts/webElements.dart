@@ -99,7 +99,7 @@ final homePageProductController = Get.put(HomePageProductFetchControler());
               inputText: textinput,
               color: textColor,
               fontWeight: FontWeight.bold,
-              fontsize: 18),
+              fontsize: 15),
         ),
       ),
     );
@@ -633,7 +633,7 @@ Widget homePageProductList() {
                       inputText: item['text'],
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontsize: 16,
+                      fontsize: 15,
                     ),
                   ),
                   SizedBox(height: 30.h),
@@ -645,125 +645,151 @@ Widget homePageProductList() {
   }
 
   Widget customDropdown() {
-    return SizedBox(
-      height: 900.h,
-      width: 700.w,
-      child: Stack(
-        children: [
-          MouseRegion(
-            onEnter: (_) => isHover1.value = true,
+  return SizedBox(
+    height: 900.h,
+    width: 700.w,
+    child: Stack(
+      children: [
+        // Dropdown 1
+        MouseRegion(
+          onEnter: (_) => isHover1.value = true,
+          onExit: (_) {
+            Future.delayed(const Duration(milliseconds: 300), () {
+              isHover1.value = false;
+              bool1.value = false;
+            });
+          },
+          child: Obx(() => AnimatedSlide(
+                duration: const Duration(milliseconds: 300),
+                offset: bool1.value ? const Offset(0, 0) : const Offset(0, -0.05),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: bool1.value ? 1.0 : 0.0,
+                  child: Visibility(
+                    visible: bool1.value,
+                    child: customContainer(
+                      Colors.yellow,
+                      120,
+                      [
+                        {'text': 'Gents Collection', 'route': const GentsCollection()},
+                        {'text': 'Fe-male Collection', 'route': const FemaleCollection()},
+                        {'text': 'Beauty Products', 'route': const BeautyProducts()},
+                        {'text': 'Baby Products', 'route': const BabyProducts()},
+                      ],
+                    ),
+                  ),
+                ),
+              )),
+        ),
+
+        // Dropdown 2
+        Positioned(
+          left: 146.w,
+          child: MouseRegion(
+            onEnter: (_) => isHover2.value = true,
             onExit: (_) {
               Future.delayed(const Duration(milliseconds: 300), () {
-                isHover1.value = false;
-                bool1.value = false;
+                isHover2.value = false;
+                bool2.value = false;
               });
             },
-            child: Obx(() => bool1.value
-                ? customContainer(
-                    Colors.yellow,
-                    120,
-                    [
-                      {
-                        'text': 'Gents Collection',
-                        'route': const GentsCollection()
-                      },
-                      {
-                        'text': 'Fe-male Collection',
-                        'route': const FemaleCollection()
-                      },
-                      {
-                        'text': 'Beauty Products',
-                        'route': const BeautyProducts()
-                      },
-                      {'text': 'Baby Products', 'route': const BabyProducts()}
-                    ],
-                  )
-                : const SizedBox()),
-          ),
-          Positioned(
-              left: 146.w,
-              child: MouseRegion(
-                  onEnter: (_) => isHover2.value = true,
-                  onExit: (_) {
-                    Future.delayed(const Duration(microseconds: 300), () {
-                      isHover2.value = false;
-                      bool2.value = false;
-                    });
-                  },
-                  child: Obx(() => bool2.value
-                      ? customContainer(Colors.yellow, 120, [
-                          {
-                            'text': 'Organic Oils',
-                            'route': const GentsCollection()
-                          },
+            child: Obx(() => AnimatedSlide(
+                  duration: const Duration(milliseconds: 300),
+                  offset: bool2.value ? const Offset(0, 0) : const Offset(0, -0.05),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: bool2.value ? 1.0 : 0.0,
+                    child: Visibility(
+                      visible: bool2.value,
+                      child: customContainer(
+                        Colors.yellow,
+                        120,
+                        [
+                          {'text': 'Organic Oils', 'route': const GentsCollection()},
                           {'text': 'Honey', 'route': const FemaleCollection()},
-                          {
-                            'text': 'Seeds & Dry Powders',
-                            'route': const BeautyProducts()
-                          },
-                        ])
-                      : const SizedBox()))),
-          Positioned(
-              left: 260.w,
-              child: MouseRegion(
-                  onEnter: (_) => isHover3.value = true,
-                  onExit: (_) {
-                    Future.delayed(
-                      const Duration(milliseconds: 300),
-                      () {
-                        isHover3.value = false;
-                        bool3.value = false;
-                      },
-                    );
-                  },
-                  child: Obx(() => bool3.value
-                      ? customContainer(Colors.yellow, 120, [
+                          {'text': 'Seeds & Dry Powders', 'route': const BeautyProducts()},
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+          ),
+        ),
+
+        // Dropdown 3
+        Positioned(
+          left: 270.w,
+          child: MouseRegion(
+            onEnter: (_) => isHover3.value = true,
+            onExit: (_) {
+              Future.delayed(const Duration(milliseconds: 300), () {
+                isHover3.value = false;
+                bool3.value = false;
+              });
+            },
+            child: Obx(() => AnimatedSlide(
+                  duration: const Duration(milliseconds: 300),
+                  offset: bool3.value ? const Offset(0, 0) : const Offset(0, -0.05),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: bool3.value ? 1.0 : 0.0,
+                    child: Visibility(
+                      visible: bool3.value,
+                      child: customContainer(
+                        Colors.yellow,
+                        120,
+                        [
                           {'text': 'Laptops', 'route': const GentsCollection()},
-                          {
-                            'text': 'Computer Items',
-                            'route': const FemaleCollection()
-                          },
-                          {
-                            'text': 'Mobile Phone',
-                            'route': const BeautyProducts()
-                          },
+                          {'text': 'Computer Items', 'route': const FemaleCollection()},
+                          {'text': 'Mobile Phone', 'route': const BeautyProducts()},
                           {'text': 'Gadget', 'route': const BeautyProducts()},
-                          {
-                            'text': 'Home Accessories',
-                            'route': const BeautyProducts()
-                          }
-                        ])
-                      : const SizedBox()))),
-          Positioned(
-              left: 450.w,
-              child: MouseRegion(
-                  onEnter: (_) => isHover4.value = true,
-                  onExit: (_) {
-                    Future.delayed(
-                      const Duration(milliseconds: 300),
-                      () {
-                        isHover4.value = false;
-                        bool4.value = false;
-                      },
-                    );
-                  },
-                  child: Obx(() => bool4.value
-                      ? customContainer(Colors.yellow, 120, [
+                          {'text': 'Home Accessories', 'route': const BeautyProducts()},
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+          ),
+        ),
+
+        // Dropdown 4
+        Positioned(
+          left: 470.w,
+          child: MouseRegion(
+            onEnter: (_) => isHover4.value = true,
+            onExit: (_) {
+              Future.delayed(const Duration(milliseconds: 300), () {
+                isHover4.value = false;
+                bool4.value = false;
+              });
+            },
+            child: Obx(() => AnimatedSlide(
+                  duration: const Duration(milliseconds: 300),
+                  offset: bool4.value ? const Offset(0, 0) : const Offset(0, -0.05),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: bool4.value ? 1.0 : 0.0,
+                    child: Visibility(
+                      visible: bool4.value,
+                      child: customContainer(
+                        Colors.yellow,
+                        120,
+                        [
                           {'text': 'Contact Us', 'route': const AboutUsPage()},
-                          {
-                            'text': 'Privacy and Policy',
-                            'route': const FemaleCollection()
-                          },
-                          {
-                            'text': 'Rerurn Policy',
-                            'route': const BeautyProducts()
-                          },
-                        ])
-                      : const SizedBox())))
-        ],
-      ),
-    );
-  }
+                          {'text': 'Privacy and Policy', 'route': const FemaleCollection()},
+                          {'text': 'Return Policy', 'route': const BeautyProducts()},
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
 
 

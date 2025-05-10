@@ -25,6 +25,12 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController phoneinfoecom = TextEditingController();
   TextEditingController passwordcontroler = TextEditingController();
 
+  final obsText = true.obs;
+  
+    void togglePasswordVisibility() {
+    obsText.value = !obsText.value;
+  }
+
   final authcontler = AuthController();
   final elementscontroller = Elements();
 
@@ -40,8 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               elementscontroller.navbar(),
               Container(
-                                padding:  EdgeInsets.symmetric(vertical: 30.h),
-
+                padding: EdgeInsets.symmetric(vertical: 30.h),
                 decoration: BoxDecoration(
                     color: Colors.yellow.shade300,
                     borderRadius: BorderRadius.all(Radius.circular(30.r))),
@@ -61,7 +66,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            
                             SizedBox(
                                 width: 400.w,
                                 child: TextFormField(
@@ -72,17 +76,14 @@ class _SignUpPageState extends State<SignUpPage> {
                                     return null;
                                   },
                                   controller: nameinfoecom,
-                                  style:
-                                      const TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     labelText: 'Enter your name',
-                                                                            labelStyle: TextStyle(color: Colors.black),
-
+                                    labelStyle: TextStyle(color: Colors.black),
                                     border: OutlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors
-                                              .black), 
+                                      borderSide:
+                                          BorderSide(color: Colors.black),
                                     ),
                                   ),
                                 )),
@@ -102,17 +103,50 @@ class _SignUpPageState extends State<SignUpPage> {
                                     return null;
                                   },
                                   controller: emailinfoecom,
-                                  style:
-                                      const TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     labelText: 'Enter your email',
-                                                                            labelStyle: TextStyle(color: Colors.black),
-
+                                    labelStyle: TextStyle(color: Colors.black),
                                     border: OutlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors
-                                              .black), 
+                                      borderSide:
+                                          BorderSide(color: Colors.black),
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SizedBox(
+                                width: 400.w,
+                                child: Obx(
+                                  () => TextFormField(
+                                    obscureText: obsText.value,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter some text';
+                                      }
+                                      return null;
+                                    },
+                                    controller: passwordcontroler,
+                                    style: const TextStyle(color: Colors.black),
+                                    decoration: InputDecoration(
+                                      suffixIcon: IconButton(
+                                        onPressed: togglePasswordVisibility,
+                                        icon: Icon(
+                                          obsText.value
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                        ),
+                                      ),
+                                      labelText: 'Enter your password',
+                                      labelStyle:
+                                        const  TextStyle(color: Colors.black),
+                                      border: const OutlineInputBorder(),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                      ),
                                     ),
                                   ),
                                 )),
@@ -128,45 +162,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                     }
                                     return null;
                                   },
-                                  controller: passwordcontroler,
-                                  style:
-                                      const TextStyle(color: Colors.black),
-                                   decoration: const InputDecoration(
-                                    labelText: 'Enter your password',
-                                                                            labelStyle: TextStyle(color: Colors.black),
-
-                                    border: OutlineInputBorder(),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors
-                                              .black), 
-                                    ),
-                                  ),
-                                )),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            SizedBox(
-                                width:400.w,
-                                child: TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
                                   controller: addressinfoecom,
-                                  style:
-                                      const TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     labelText: 'Enter your address',
-                                                                            labelStyle: TextStyle(color: Colors.black),
-
+                                    labelStyle: TextStyle(color: Colors.black),
                                     border: OutlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors
-                                              .black), 
+                                      borderSide:
+                                          BorderSide(color: Colors.black),
                                     ),
                                   ),
                                 )),
@@ -183,17 +187,14 @@ class _SignUpPageState extends State<SignUpPage> {
                                     return null;
                                   },
                                   controller: phoneinfoecom,
-                                  style:
-                                      const TextStyle(color: Colors.black),
-                                 decoration: const InputDecoration(
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
                                     labelText: 'Enter your phone',
-                                                                            labelStyle: TextStyle(color: Colors.black),
-
+                                    labelStyle: TextStyle(color: Colors.black),
                                     border: OutlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors
-                                              .black), 
+                                      borderSide:
+                                          BorderSide(color: Colors.black),
                                     ),
                                   ),
                                 )),
@@ -216,7 +217,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             width: 20.w,
                           ),
                           InkWell(
-                            onTap: ()=> Get.to(()=>  const Login()),
+                            onTap: () => Get.to(() => const Login()),
                             child: CustomText(
                                 inputText: "Login Now",
                                 fontsize: 12,
