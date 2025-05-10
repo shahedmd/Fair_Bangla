@@ -3,6 +3,7 @@ import 'package:fair_bangla/Webscreen/payment/paymentapi.dart';
 import 'package:fair_bangla/cartPage/getxCartControler.dart';
 import 'package:fair_bangla/firebase.auth.dart';
 import 'package:fair_bangla/usermodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class FinalOrder extends StatefulWidget {
 
 class _FinalOrderState extends State<FinalOrder> {
   final cartController = Get.find<CartControler>();
+  final userUid = FirebaseAuth.instance.currentUser;
 
   final elements = Elements();
   final auth = AuthController();
@@ -287,13 +289,25 @@ class _FinalOrderState extends State<FinalOrder> {
                   SizedBox(
                     height: 25.h,
                   ),
-                  Obx(
-                    ()=> pay.isloading.value ?
-                    const  Center(child: CircularProgressIndicator(),) : 
-                    elements.customButton("Make payment", Colors.pink, () {
-                      pay.initiatePayment(cartController.total);
-                    }, Colors.white)  
-                  ),
+                  Obx(() => pay.isloading.value
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : elements.customButton("Make payment", Colors.pink, () {
+                          pay.initiatePayment(
+                              amount: cartController.total,
+                              customerData: {
+                                'name': 'Hafsa',
+                                'email': 'hafsa@example.com',
+                                'phone': '01700000000',
+                                'address': 'Uttara, Dhaka',
+                                'city': 'Dhaka',
+                              },
+                              items: cartController.productsList
+                                  .map((item) => item.toJson())
+                                  .toList(),
+                              orderId: userUid!.uid);
+                        }, Colors.white)),
                   SizedBox(
                     height: 30.h,
                   ),

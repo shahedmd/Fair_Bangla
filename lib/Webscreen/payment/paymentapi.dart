@@ -1,33 +1,37 @@
 
 
-// ignore_for_file: avoid_web_libraries_in_flutter, avoid_print, depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
+class PayApi {
+  RxBool isloading = false.obs;
 
-
-
-
-
-class PayApi{
- 
- RxBool isloading = false.obs;
- Future<void> initiatePayment(double amount) async {
-    
-    
+  Future<void> initiatePayment({
+    required String orderId,
+    required double amount,
+required List<Map<String, dynamic>> items,
+    required Map<String, dynamic> customerData,
+  }) async {
     if (amount <= 0) {
+      print('❌ Invalid amount');
       return;
     }
 
     try {
-      isloading.value =  true;
+      isloading.value = true;
+
       final response = await http.post(
         Uri.parse('http://localhost:8080/create-payment'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'amount': amount.toString()}),
+        body: jsonEncode({
+          'orderId': orderId,
+          'amount': amount,
+          'items': items,
+          'customerData': customerData,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -35,22 +39,21 @@ class PayApi{
         final gatewayUrl = responseData['GatewayPageURL'];
         if (gatewayUrl != null) {
           _redirectToWeb(gatewayUrl);
+        } else {
+          print('❌ Missing GatewayPageURL in response');
         }
-
-        // Handle response data here, like opening the payment page.
-        print(responseData);
-        isloading.value = false;
-      } else {  
-        print('Failed to initiate payment');
+      } else {
+        print('❌ Failed to initiate payment: ${response.statusCode}');
+        print(response.body);
       }
     } catch (e) {
-      print('Error: $e');
+      print('❌ Exception: $e');
+    } finally {
+      isloading.value = false;
     }
   }
 
-
   void _redirectToWeb(String url) {
-  html.window.open(url, '_self');
-}
-
+    html.window.open(url, '_self');
+  }
 }
