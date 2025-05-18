@@ -198,7 +198,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                             ),
                           ),
                           Container(
-                            height: 700.h,
+                            height: 800.h,
                             width: 400.w,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 40.w, vertical: 25.h),
@@ -298,17 +298,13 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontsize: 12),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
+                                
                                 elmentsControler.customButton(
                                     "Add To Cart", Colors.black, () {
                                   cartController.addProduct(
                                       widget.products, context);
                                 }, Colors.white),
-                                SizedBox(
-                                  width: 30.w,
-                                )
+                                
                               ],
                             ),
                           )

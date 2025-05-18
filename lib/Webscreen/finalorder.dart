@@ -18,11 +18,11 @@ class FinalOrder extends StatefulWidget {
 
 class _FinalOrderState extends State<FinalOrder> {
   final cartController = Get.find<CartControler>();
-  final userUid = FirebaseAuth.instance.currentUser;
+  final userUid = FirebaseAuth.instance.currentUser!.uid;
 
   final elements = Elements();
   final auth = AuthController();
-  final pay = PayApi();
+  final pay = PaymentController();
 
   @override
   Widget build(BuildContext context) {
@@ -289,25 +289,46 @@ class _FinalOrderState extends State<FinalOrder> {
                   SizedBox(
                     height: 25.h,
                   ),
-                  Obx(() => pay.isloading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : elements.customButton("Make payment", Colors.pink, () {
-                          pay.initiatePayment(
-                              amount: cartController.total,
-                              customerData: {
-                                'name': 'Hafsa',
-                                'email': 'hafsa@example.com',
-                                'phone': '01700000000',
-                                'address': 'Uttara, Dhaka',
-                                'city': 'Dhaka',
-                              },
-                              items: cartController.productsList
-                                  .map((item) => item.toJson())
-                                  .toList(),
-                              orderId: userUid!.uid);
-                        }, Colors.white)),
+                Obx(() => pay.isloading.value
+    ? const Center(
+        child: CircularProgressIndicator(),
+      )
+    : elements.customButton("Make payment", Colors.pink, () {
+        final body = {
+          "amount": cartController.total.toString(),
+          "orderId": userUid,
+          "customerData": {
+            "name": "userName",
+            "email": "userEmail",
+            "phone": "userPhone",
+            "add": "userAddress",
+          },
+          "items": cartController.productsList.map((cart) => {  
+            "products": {
+              "id": cart.products.id,
+              "name": cart.products.name,
+              "price": cart.products.price,
+              "url": cart.products.url,
+              "selectedColor": cartController.selectedColors[cart.products.id] ?? "Not Selected",
+              "selectedSize": cartController.seledtedSize[cart.products.id] ?? "Not Selected",
+            },
+            "quantity": cart.quantity,
+          }).toList(),
+        };
+
+       final rawItems = body['items'];
+if (rawItems is List) {  
+  pay.initiatePayment(
+    body: body,
+   
+  );
+} else {
+  print('❌ body["items"] is not a valid List');
+}
+
+      }, Colors.white)),
+
+
                   SizedBox(
                     height: 30.h,
                   ),

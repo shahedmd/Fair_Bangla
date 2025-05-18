@@ -1,3 +1,5 @@
+
+ // ignore_for_file: file_names, empty_catches
  
 import 'package:fair_bangla/Elemnts/datamodel.dart';
 import 'package:fair_bangla/Elemnts/helpingwidgets.dart';
@@ -20,7 +22,6 @@ import '../Webscreen/fashion pages/beautyproducts.dart';
 import '../Webscreen/fashion pages/femalecollection.dart';
 import '../Webscreen/fashion pages/gentscollection.dart';
 import '../Webscreen/userprofile.dart';
-import 'package:flutter/material.dart';
 
 class Elements extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -55,7 +56,9 @@ final homePageProductController = Get.put(HomePageProductFetchControler());
           querySnapshot.docs.map((doc) => doc['url'] as String).toList();
 
       urlList.value = urls;
-    } catch (e) {}
+    } catch (e) {
+      
+    }
   }
 
   final FirebaseFirestore firestoreinstance = FirebaseFirestore.instance;

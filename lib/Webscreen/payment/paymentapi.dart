@@ -1,44 +1,33 @@
-
+// ignore_for_file: avoid_web_libraries_in_flutter
 
 import 'dart:convert';
+// ignore: deprecated_member_use
 import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 
-class PayApi {
-  RxBool isloading = false.obs;
+class PaymentController extends GetxController {
+  var isloading = false.obs;
 
   Future<void> initiatePayment({
-    required String orderId,
-    required double amount,
-required List<Map<String, dynamic>> items,
-    required Map<String, dynamic> customerData,
+  
+    required Map<String, Object> body, 
   }) async {
-    if (amount <= 0) {
-      print('❌ Invalid amount');
-      return;
-    }
-
     try {
-      isloading.value = true;
+      isloading.value = true; 
 
+      
       final response = await http.post(
         Uri.parse('http://localhost:8080/create-payment'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'orderId': orderId,
-          'amount': amount,
-          'items': items,
-          'customerData': customerData,
-        }),
+        body: jsonEncode(body), 
       );
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        final gatewayUrl = responseData['GatewayPageURL'];
+        final gatewayUrl = responseData['GatewayPageURL']; 
         if (gatewayUrl != null) {
-          _redirectToWeb(gatewayUrl);
+          _redirectToWeb(gatewayUrl); 
         } else {
           print('❌ Missing GatewayPageURL in response');
         }
@@ -49,11 +38,12 @@ required List<Map<String, dynamic>> items,
     } catch (e) {
       print('❌ Exception: $e');
     } finally {
-      isloading.value = false;
+      isloading.value = false; 
     }
   }
 
+
   void _redirectToWeb(String url) {
-    html.window.open(url, '_self');
+    html.window.open(url, '_self'); 
   }
 }
