@@ -188,7 +188,7 @@ class _FinalOrderState extends State<FinalOrder> {
                         Positioned(
                           top: 80.h,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 475.w),
+                            padding: EdgeInsets.only(left: 455.w),
                             child: elements.customDropdown(),
                           ),
                         )

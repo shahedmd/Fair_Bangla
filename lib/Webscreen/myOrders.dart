@@ -47,7 +47,7 @@ class _MyOrdersState extends State<MyOrders> {
                   );
                 }
 
-                final height = controller.orders.length * 600.h;
+                final height = controller.orders.length * 800.h;
 
                 return SizedBox(
                   height: height,
@@ -249,7 +249,7 @@ class _MyOrdersState extends State<MyOrders> {
                     Positioned(
                       top: 80.h,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 475.w),
+                        padding: EdgeInsets.only(left: 455.w),
                         child: elementscontroller.customDropdown(),
                       ),
                     )

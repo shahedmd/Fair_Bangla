@@ -390,7 +390,7 @@ class _UserProfileState extends State<UserProfile> {
                 Positioned(
                   top: 80.h,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 470.w),
+                    padding: EdgeInsets.only(left: 455.w),
                     child: elementsController.customDropdown(),
                   ),
                 )

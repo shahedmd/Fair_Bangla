@@ -212,15 +212,18 @@ final homePageProductController = Get.put(HomePageProductFetchControler());
                 ? customButton("Log In", Colors.yellow, () {
                     Get.to(const Login());
                   }, Colors.black)
-                : InkWell(
-                    onTap: () {
-                      Get.to(() => const UserProfile());
-                    },
-                    child: CustomText(
-                        inputText: "User Profile",
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontsize: 18))
+                : SizedBox(
+                  width: 140.w,
+                  child: InkWell(
+                      onTap: () {
+                        Get.to(() => const UserProfile());
+                      },
+                      child: CustomText(
+                          inputText: "User Profile",
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontsize: 18)),
+                )
           ]),
     );
   }
@@ -632,11 +635,13 @@ Widget homePageProductList() {
                 children: [
                   InkWell(
                     onTap: () => Get.to(() => item['route'] as Widget),
-                    child: CustomText(
-                      inputText: item['text'],
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontsize: 15,
+                    child: FittedBox(
+                      child: CustomText(
+                        inputText: item['text'],
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontsize: 15,
+                      ),
                     ),
                   ),
                   SizedBox(height: 30.h),

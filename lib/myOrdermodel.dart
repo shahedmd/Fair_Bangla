@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+  // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -51,29 +51,42 @@ class OrderItem {
 class OrderModel {
   final String orderId;
   final List<OrderItem> items;
-  final double total;
+  final String total;
   final String status;
-  final DateTime? timestamp;
+  final String address;
+  final String email;
+  final String name;
+  final String phone;
+  final String transNumber;
+  final String timestamp;
 
   OrderModel({
     required this.orderId,
     required this.items,
     required this.total,
     required this.status,
-    this.timestamp,
+    required this.address,
+    required this.email,
+    required this.name,
+    required this.phone,
+    required this.transNumber,
+    required this.timestamp,
   });
 
   factory OrderModel.fromMap(Map<String, dynamic> map) {
     return OrderModel(
+      phone: map['phone'],
+      transNumber: map['transNumber'],
+      address: map['address'],
+      email: map['email'],
+      name: map['name'],
       orderId: map['orderId'],
       items: (map['items'] as List<dynamic>)
           .map((item) => OrderItem.fromMap(item))
           .toList(),
-      total: (map['total'] as num).toDouble(),
+      total: (map['total'] ),
       status: map['status'],
-      timestamp: (map['timestamp'] != null)
-          ? (map['timestamp'] as Timestamp).toDate()
-          : null,
+      timestamp: (map['timestamp'] ),
     );
   }
 

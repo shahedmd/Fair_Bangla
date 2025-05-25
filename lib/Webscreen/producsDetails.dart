@@ -315,7 +315,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                   Positioned(
                     top: 80.h,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 475.w),
+                      padding: EdgeInsets.only(left: 455.w),
                       child: elmentsControler.customDropdown(),
                     ),
                   )
